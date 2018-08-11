@@ -88,4 +88,4 @@ league_games = merge(league_games, games_visitor, by = c("Season", "Date", "visi
 
 ##### Save data tables #####
 saveRDS(team_season_load, "~/Documents/masters_paper/data-processing/Data/loadByTeam.rds", compress = FALSE)
-saveRDS(team_season_load, "~/Documents/masters_paper/data-processing/Data/teamHistory.rds", compress = FALSE)
+saveRDS(league_games, "~/Documents/masters_paper/data-processing/Data/teamHistory.rds", compress = FALSE)

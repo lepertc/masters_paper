@@ -1,0 +1,115 @@
+---
+title: "Effect of rest on soccer and tennis match outcomes"
+author: "Chloé Lepert"
+date: "8/9/2018"
+output: pdf_document
+---
+
+```{r}
+library(ggplot2); theme_set(theme_bw())
+```
+
+# Introduction
+
+# Methods
+
+# Results
+
+## Simple Poisson GLM
+
+From simpleGlm.R 
+
+\begin{table}[!htbp] \centering 
+  \caption{Generalized Linear Models with Poisson link} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-5} 
+\\[-1.8ex] & \multicolumn{2}{c}{hgoal} & \multicolumn{2}{c}{vgoal} \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4)\\ 
+\hline \\[-1.8ex] 
+ Team\_rest & $-$0.004 &  & $-$0.007 &  \\ 
+  & (0.009) &  & (0.011) &  \\ 
+  Opp\_rest & $-$0.001 &  & 0.005 &  \\ 
+  & (0.009) &  & (0.011) &  \\ 
+  Team\_rest\_bin &  & $-$0.007 &  & $-$0.029 \\ 
+  &  & (0.028) &  & (0.032) \\ 
+  Opp\_rest\_bin &  & $-$0.019 &  & 0.013 \\ 
+  &  & (0.027) &  & (0.032) \\ 
+  Team\_att\_str & 0.371$^{***}$ & 0.372$^{***}$ & 0.427$^{***}$ & 0.427$^{***}$ \\ 
+  & (0.050) & (0.050) & (0.053) & (0.053) \\ 
+  Opp\_def\_weak & 0.274$^{***}$ & 0.277$^{***}$ & 0.238$^{***}$ & 0.239$^{***}$ \\ 
+  & (0.061) & (0.061) & (0.061) & (0.061) \\ 
+  Team\_load & 0.015$^{***}$ & 0.016$^{***}$ & 0.011$^{***}$ & 0.011$^{***}$ \\ 
+  & (0.003) & (0.003) & (0.003) & (0.003) \\ 
+  Opp\_load & $-$0.020$^{***}$ & $-$0.021$^{***}$ & $-$0.024$^{***}$ & $-$0.024$^{***}$ \\ 
+  & (0.003) & (0.003) & (0.004) & (0.003) \\ 
+  Constant & $-$0.036 & $-$0.044 & $-$0.025 & $-$0.021 \\ 
+  & (0.205) & (0.198) & (0.231) & (0.223) \\ 
+ \hline \\[-1.8ex] 
+Observations & 4,296 & 4,296 & 4,296 & 4,296 \\ 
+Log Likelihood & $-$6,597.132 & $-$6,596.946 & $-$5,804.871 & $-$5,804.693 \\ 
+Akaike Inf. Crit. & 13,208.260 & 13,207.890 & 11,623.740 & 11,623.390 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+## Linear model for goal difference
+
+```{r}
+p <- readRDS("~/Documents/masters_paper/Figures/goalDiffNormal.rds")
+p
+```
+
+From lmGoalDiff.R
+\begin{table}[!htbp] \centering 
+  \caption{Linear model for the difference in goals scored} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & goal\_diff \\ 
+\hline \\[-1.8ex] 
+ h\_rest & $-$0.003 \\ 
+  & (0.018) \\ 
+  v\_rest & $-$0.002 \\ 
+  & (0.018) \\ 
+  h\_att\_str & 0.807$^{***}$ \\ 
+  & (0.105) \\ 
+  h\_def\_weak & $-$0.529$^{***}$ \\ 
+  & (0.105) \\ 
+  v\_att\_str & $-$0.672$^{***}$ \\ 
+  & (0.092) \\ 
+  v\_def\_weak & 0.795$^{***}$ \\ 
+  & (0.120) \\ 
+  h\_load & 0.036$^{***}$ \\ 
+  & (0.006) \\ 
+  v\_load & $-$0.026$^{***}$ \\ 
+  & (0.006) \\ 
+  Constant & $-$0.414 \\ 
+  & (0.450) \\ 
+ \hline \\[-1.8ex] 
+Observations & 4,296 \\ 
+R$^{2}$ & 0.146 \\ 
+Adjusted R$^{2}$ & 0.144 \\ 
+Residual Std. Error & 1.604 (df = 4287) \\ 
+F Statistic & 91.666$^{***}$ (df = 8; 4287) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+# Discusion
+
+# Conclusion
+
+# Appendix
+
+# References
