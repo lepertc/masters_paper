@@ -12,6 +12,6 @@ df$v_rest = as.numeric(difftime(df$Date, df$v_date_prior, units = "days"))
 df = df[h_rest <= 8 & v_rest <= 8]
 
 # Rest as binary variable
-df$h_rest_bin = df$h_rest > 6
-df$v_rest_bin = df$v_rest > 6
+df$h_rest_bin = df$h_rest > 5
+df$v_rest_bin = df$v_rest > 5
 saveRDS(df, "~/Documents/masters_paper/data-processing/Data/teamHistoryProcessed.rds")

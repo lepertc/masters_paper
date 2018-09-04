@@ -150,19 +150,19 @@ Home & 5 & $1$ & $26$ & $50$ & $63$ & $31$ & $90$ & $31$ \\
 \end{tabular} 
 \end{table} 
 
-We also create a binary variable for weather or not a team is "more" (7-8 days) or "less" (1-6 days) rested and find the following distribution of rest. 
+We also create a binary variable for weather or not a team is "more" (6-8 days) or "less" (1-5 days) rested and find the following distribution of rest. 
 
-\begin{table}[H] \centering 
+\begin{table}[!htbp] \centering 
   \caption{Distribution of rest time for home and away teams} 
   \label{} 
 \begin{tabular}{@{\extracolsep{5pt}} cccc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
  &  & Away &  \\ 
- &  & 1-6 days & 7-8 days \\ 
+ &  & 1-5 days & 6-8 days \\ 
 \hline \\[-1.8ex] 
-Home & 1-6 days & $1,577$ & $721$ \\ 
- & 7-8 days & $712$ & $1,286$ \\ 
+Away & 1-5 days & $1,256$ & $512$ \\ 
+ & 6-8 days & $479$ & $2,049$ \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table} 
@@ -240,7 +240,7 @@ We also see an effect from the game load of a team. Game load also measure the q
 
 \begin{table}[H] \centering 
   \caption{Generalized Linear Models with Poisson link} 
-  \label{table:glm_simple} 
+  \label{} 
 \begin{tabular}{@{\extracolsep{5pt}}lcccc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
@@ -253,29 +253,29 @@ We also see an effect from the game load of a team. Game load also measure the q
   & (0.009) &  & (0.011) &  \\ 
   Opp\_rest & $-$0.001 &  & 0.005 &  \\ 
   & (0.009) &  & (0.011) &  \\ 
-  Team\_rest\_bin &  & $-$0.007 &  & $-$0.029 \\ 
-  &  & (0.028) &  & (0.032) \\ 
-  Opp\_rest\_bin &  & $-$0.019 &  & 0.013 \\ 
-  &  & (0.027) &  & (0.032) \\ 
-  Team\_att\_str & 0.371$^{***}$ & 0.372$^{***}$ & 0.427$^{***}$ & 0.427$^{***}$ \\ 
+  Team\_rest\_bin &  & 0.047 &  & $-$0.044 \\ 
+  &  & (0.031) &  & (0.036) \\ 
+  Opp\_rest\_bin &  & $-$0.052$^{*}$ &  & 0.043 \\ 
+  &  & (0.031) &  & (0.037) \\ 
+  Team\_att\_str & 0.371$^{***}$ & 0.377$^{***}$ & 0.427$^{***}$ & 0.425$^{***}$ \\ 
   & (0.050) & (0.050) & (0.053) & (0.053) \\ 
-  Opp\_def\_weak & 0.274$^{***}$ & 0.277$^{***}$ & 0.238$^{***}$ & 0.239$^{***}$ \\ 
+  Opp\_def\_weak & 0.274$^{***}$ & 0.280$^{***}$ & 0.238$^{***}$ & 0.239$^{***}$ \\ 
   & (0.061) & (0.061) & (0.061) & (0.061) \\ 
-  Team\_load & 0.015$^{***}$ & 0.016$^{***}$ & 0.011$^{***}$ & 0.011$^{***}$ \\ 
+  Team\_load & 0.015$^{***}$ & 0.017$^{***}$ & 0.011$^{***}$ & 0.010$^{***}$ \\ 
   & (0.003) & (0.003) & (0.003) & (0.003) \\ 
-  Opp\_load & $-$0.020$^{***}$ & $-$0.021$^{***}$ & $-$0.024$^{***}$ & $-$0.024$^{***}$ \\ 
-  & (0.003) & (0.003) & (0.004) & (0.003) \\ 
-  Constant & $-$0.036 & $-$0.044 & $-$0.025 & $-$0.021 \\ 
-  & (0.205) & (0.198) & (0.231) & (0.223) \\ 
+  Opp\_load & $-$0.020$^{***}$ & $-$0.021$^{***}$ & $-$0.024$^{***}$ & $-$0.023$^{***}$ \\ 
+  & (0.003) & (0.003) & (0.004) & (0.004) \\ 
+  Constant & $-$0.036 & $-$0.077 & $-$0.025 & $-$0.041 \\ 
+  & (0.205) & (0.199) & (0.231) & (0.223) \\ 
  \hline \\[-1.8ex] 
 Observations & 4,296 & 4,296 & 4,296 & 4,296 \\ 
-Log Likelihood & $-$6,597.132 & $-$6,596.946 & $-$5,804.871 & $-$5,804.693 \\ 
-Akaike Inf. Crit. & 13,208.260 & 13,207.890 & 11,623.740 & 11,623.390 \\ 
+Log Likelihood & $-$6,597.132 & $-$6,595.641 & $-$5,804.871 & $-$5,804.193 \\ 
+Akaike Inf. Crit. & 13,208.260 & 13,205.280 & 11,623.740 & 11,622.390 \\ 
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
 \end{tabular} 
-\end{table} 
+\end{table}
 
 
 ## Linear model for goal difference
