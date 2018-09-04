@@ -14,7 +14,7 @@ library(ggplot2); theme_set(theme_bw())
 
 # 1. Introduction
 
-Many factors influence the athletic performance in competitions. Most models aiming to predict results focus on the strength of the team and location of the competition, but other factors could have an impact. In this paper we will look at how rest impacts the performance of soccer teams and tennis players. 
+Many factors influence athletic performance in competitions. Most models aiming to predict results focus on the strength of the team and location of the competition, but other factors that players and teams can control could have an impact. In this paper we will look at how rest and tiredness impact the performance of soccer teams and tennis players. 
 
 ## 1.1 Question 
 
@@ -35,24 +35,36 @@ Before explaining our motivation we will first given an overview of the English 
 English soccer is comprised of multiple competitions. 
 
 \begin{itemize}
-    \item Premier league - Top 20 teams in England. They will play each other time once at home and once away, totally 380 games. A win will get a team 3 points, a draw one point, and loss 0 points. At the end of the season points are tallied, and the team with the most points win. The bottom two teams will be relegated to the EFL Championship. The top two teams from EFL Championship will advance to the Premier league. The third to last team in the Premier league and third team in the EFL Championship will play off to play in the Premier league. \cite{PremierLeague}
-    \item FA cup - Open to teams in 10 levels of English football, this a knockout tournament. Teams enter the tournament at different times depending on the level they play in. Teams that play in the Premier league will enter the 3rd round in January with the final in May. \cite{FACup}
-    \item EFL cup - similar to the FA cup but open only to levels 1 through 4. Premier league teams will enter in August with the final in February. Teams playing in European competitions will not play this cup \cite{EFLCup}
-    \item Champions league - A competition played with team from different European leagues. It starts with a group stage of 32 teams. Leading to 16 teams going though a tournament. Teams not advancing to the tournament are transferred to the Europa league. In the tournament stage teams meet twice once home once away. The return leg can go overtime to decide who gets to move to the next round. The final is played in one game in a location determined ahead of time. \cite{Champions} In England the top three teams in the premier league automatically qualify for the Champions league. The fourth place team qualifies for a play-off round. \cite{PL}
-    \item Europa league - Similar to the Champions league in format. \cite{EuropaLeague} The 5th place Premier league team qualifies for the group stage, with the winners of the FA cup and EFL cup qualifying for earlier rounds. \cite{PL}
+    \item The top 20 teams in England play in the \textbf{Premier League}. They will play each other time once at home and once away resultung in 380 games played each season. Each match earns teams points; a win will get a team 3 points, a draw one point, and loss 0 points. The team with the most points win. The bottom two teams will be relegated to the EFL Championship. The top two teams from EFL Championship will advance to the Premier league. The third to last team in the Premier league and third team in the EFL Championship will play off to play in the Premier league. \cite{PremierLeague}
+    \item The \textbf{FA cup} is a knockout tournament open to teams in 10 levels of English football, this a knockout tournament. Teams enter the tournament at different times depending on the level they play in. Teams that play in the Premier league will enter the 3rd round in January with the hope of making it to the final played in May. \cite{FACup}
+    \item The \textbf{EFL cup} is a tournament similar to the FA cup but open only to levels 1 through 4. Premier league teams will enter in August. Matches continue until the final in February. Teams playing in European competitions do not play in this cup \cite{EFLCup}
 \end{itemize}
 
-International break - depending on the year, the schedule will be inter-spaced with 2-week international breaks, in which players are called to represent their national teams in international friendlies or qualifying matches for continent or world cups. 
+There are two European competitions which are played with teams from different European leagues:
+
+\begin{itemize}
+    \item The top teams play in the \textbf{Champions League}. It starts with a group stage of 32 teams in which mini round robins are run in each group to determine which 16 teams go on to the tournament. Teams not advancing to the tournament are transferred to the Europa league. In the tournament stage teams meet twice: once home and once away. Since only one team can move forward to the next round, the return leg can go overtime to decide who win. The final is played in one match in a location determined ahead of time. \cite{Champions} In England the top three premier league teams automatically qualify for the Champions league. The fourth place team qualifies for a play-off round. \cite{PL}
+    \item The \textbf{Europa league} is similar to the Champions league in format but played with the top teams not qualifying for the champions league. Depending on how a team qualifies it will enter the competition at different rounds. \cite{EuropaLeague} The 5th place Premier league team qualifies for the group stage, with the winners of the FA cup and EFL cup qualifying for earlier rounds. \cite{PL}
+\end{itemize}
+
+Depending on the year, the schedule will be inter-spaced with 2-week \textbf{international breaks}, in which players are called to represent their national team in international friendlies or qualifying matches for continent or world cups. 
+
+The wide variety of competition that a team could play in means that teams can have different schedule load as shown in the following figure.
+
+```{r}
+source("~/Documents/masters_paper/Figures/Make/gameLoad.R")
+p
+```
 
 ## 1.2 Relevance
 
-Football game scheduling varies from league to league. In particular, some leagues take a winter break while others do not. Some speculate that this winter break influences performance in inter-league competitions such as the Champions and Europa league. \cite{Winter}
+Football game scheduling varies from league to league. In particular, some leagues take a winter break while others do not. Some speculate that this winter break influences performance in inter-league competitions such as the Champions and Europa league by allowing teams that have the break to be more refreshed. \cite{Winter}
 
-Further Champions and Europa league games are played Tuesday through Thursday, while club games are played Friday through Mondays, leading to a variety of rest days going into Champions and Europa league games. (NEED CITATION) Some leagues are more willing to accommodate teams playing in European competitions than others.
+Further Champions and Europa league games are played Tuesday through Thursday, while club games are played Friday through Mondays, leading to a variety of rest days going into Champions and Europa league games. (NEED CITATION) Some leagues are more willing to accommodate teams playing in European competitions than others by letting them schedule their games earlier in the weekend.
 
 ## 1.3 Approach
 
-Due to the few numbers of European competition games played, modeling outcomes of European matches is difficult. We will instead model the outcome of Premier League matches to evaluate the effect of game load and rest. 
+While we would ideally want to look at how rest affects performance in european competitions doing so is difficult because the teams that play each other in European competitions do not do so enough for us to calculate and control for team ability on an even scale. We will instead model the outcome of Premier League matches, which are set up such that we can easily control for team ability. We will evaluate how matches in competitions other than the premier league influence premier league matches.
 
 This approach assumes that European competition games are similar Premier League games. This is mostly true except for the fact that European competition games can result in overtime and are higher stakes; a loss results in elimination. We assume that if we see rest impact outcomes in premier league games, rest is likely to have an impact in European games. 
 
@@ -63,7 +75,7 @@ This approach assumes that European competition games are similar Premier League
 
 Most of research on impacts of game scheduling focuses on injury and measures of certain activities in games (distance ran, number of sprints, etc.), but not on overall game outcomes. 
 
-Over the past decades, Carlos Lago Penas conducted a series of study have looking at how physical behaviors of players such as distance run at certain speeds evolve over a series of consecutive games with small rest periods and found minor to no differences in physical behaviors across games. \cite{Penas1, Penas2}
+Over the past decades, Carlos Lago Penas conducted a series of study looking at how physical behaviors of players such as distance run at certain speeds evolve over a series of consecutive games with small rest periods and found minor to no differences in physical behaviors across games. \cite{Penas1, Penas2}
 
 In 2010, Dupont et al. found a higher injury rates for football players who played two matches a week compared to players playing 1 match a week.
 
@@ -78,18 +90,22 @@ In 2003, Karlis and Ntzoufras proposed a diagonal inflated bivariate Poisson mod
 
 ### 1.5.1 Data set
 
-The R package "engsoccerdata" provides us will all score from matches in England as well as European competition played by English teams over the past 100 years. \cite{Curley} We limit ourselves to matches occurring in seasons 1995 through 2015. The design of English Football stays consistent throughout this time range and our data set is complete for these years.
+The R package "engsoccerdata" provides us with scores from matches in England as well as European competition matches. \cite{Curley} We limit ourselves to matches occurring in seasons 1995 through 2015. The design of English Football stays consistent throughout this time range and the data set is complete for these years.
 
 ### 1.5.2 Response variable
 
-We use two different type of response variables: 1. The number of home and away goals and 2. Weather the a team won, tied, or lost. The distribution of home and away goals is shown bellow.
+We use two different response variables: 1. The number of home and away goals and 2. Weather the a team won, tied, or lost. The distribution of home and away goals is shown bellow.
 
-```{r}
+```{r include=FALSE}
 source("~/Documents/masters_paper/Figures/Make/goalDist.R")
-p
 ```
 
-Most models modeling number of goals in a game assume he number of home and away goals in a game follow an approximately poisson distribution. We see that this approximately true. There tends more games than expected with zero goals and the variance is slightly larger than the mean number of goals.
+```{r}
+plot(p)
+```
+
+
+Most models for the number of goals by team in a game assume he number of home and away goals follow a poisson distribution. We see that this approximately true. There tends more games than expected with zero goals and the variance is slightly larger than the mean number of goals.
 
 A game is a home win if the number of home goals exceeds the number of visitor goals, tied if both teams score the same number of goals, and a visitor win if the number of visitor goals exceeds the number of home goals. The distribution of outcomes is shown below. 
 
@@ -99,26 +115,18 @@ A game is a home win if the number of home goals exceeds the number of visitor g
 \begin{tabular}{@{\extracolsep{5pt}} cccc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
- & Outcome & Number of games & Share of games \\ 
+Outcome & Number of games & Share of games \\ 
 \hline \\[-1.8ex] 
-1 & Home win & $1,966$ & $0.458$ \\ 
-2 & Tie & $1,143$ & $0.266$ \\ 
-3 & Visitor win & $1,187$ & $0.276$ \\ 
+Home win & $1,966$ & $0.458$ \\ 
+Tie & $1,143$ & $0.266$ \\ 
+Visitor win & $1,187$ & $0.276$ \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table} 
 
-We also control for the number of games a team plays per season. Better teams will last longer in in playoff competitions (FA Cup, Europa/Champions League, etc.) that happen concurrently with premier league games. These teams will play more games per season and thus on average have lower rest times.
-
-```{r}
-source("~/Documents/masters_paper/Figures/Make/gameLoad.R")
-p
-```
-
 ### 1.5.3 Predictors
-While we use all games in the data set to calculate game load and rest time we limit ourselves to games in the premier league in evaluating the effect of rest on outcomes. We do this because design of the premier league in which pair of team plays each other once at home and once away allows for cleaner statistical analysis.
 
-We use this data set to calculate the number of days since the previous game. Before performing out analysis on the effect of rest time we remove games in which either of the team's previous game was over 8 days ago. If team's last non-international game was more than 8 days prior, it is possible that an international break previous happened which we have no way of controlling for. 
+Using this data set we calculate the number of days since the previous game. Before performing out analysis on the effect of rest time we remove games in which either of the team's previous game was over 8 days ago. If team's last non-international game was more than 8 days prior, it is possible that an international break previous happened which we have no way of controlling for. 
 
 The distribution of rest time for the home and away team is shown below. 
 
@@ -161,14 +169,22 @@ Home & 1-6 days & $1,577$ & $721$ \\
 
 ### 1.5.4 Control variables
 
-Using Premier games we calculate a teams attacking and defensive weakness. \cite{Cronin} The attacking strength is the ratio of the average number of goals score by a team in a season to the average number of goals scored in the league that season. The defensive weakness is the ratio of the average number of goal conceded by a team in a season to the average number of goals concede in the league that season. For each team the attacking strength is computed for home and away games. The better a team the higher its attacking strength and the lower its defensive weakness strength will be. We will use the previous years attacking and defensive weakness to control for a team's ability. We exclude recently promoted teams from our analysis as we cannot use their previous season to calculate such strengths. The distribution of attacking and defensive strengths is shown below.
+Using Premier games we calculate a teams attacking and defensive weakness. \cite{Cronin} The attacking strength is the ratio of the average number of goals score by a team in a season to the average number of goals scored in the league that season. The defensive weakness is the ratio of the average number of goal conceded by a team in a season to the average number of goals conceded in the league that season. For each team the attacking strength and defensive weakness are computed for home and away games. The better a team the higher its attacking strength and the lower its defensive weakness strength will be. We will use the previous years attacking and defensive weakness to control for a team's ability. We exclude recently promoted teams from our analysis as we cannot use their previous season to calculate such strengths. The distribution of attacking and defensive strengths is shown below.
 
 ```{r, cache=FALSE}
 source("~/Documents/masters_paper/Figures/Make/strengthDist.R")
 p
 ```
 
-### 1.5.5 Further subsetting
+We also control for the number of games a team plays each season. Better teams will last longer in in playoff competitions (FA Cup, Europa/Champions League, etc.) that happen concurrently with premier league games. These teams will play more games per season and thus on average have lower rest times. In particular, the design of the premier league in which each pair of teams plays each other once at each team's home stadium allows to easily calculate attacking strength and defensive weakness.
+
+### 1.5.5 Matches looked at
+
+As described in the previous subsections there are two points at which we remove premier league games from our data set.
+\begin{enumerate}
+  \item{Matches with recently promoted teams. Since we use the previous premier league season to calculate the team's attacking strength and defensive weakness we cannot calculate these quantities for recently promote teams. Removing these matches removes 2540 out of 7980 matches (32\%).}
+  \item{Matches with over 8 days of rest. It is likely that an international match happened during the break which we do not have in our data. Leaving these matches in would lead to low rest matches presenting themselves as high rest matches. Removing these matches removes 1144 out of 5440 matches (21\%).}
+\end{enumerate}
 
 # 2 Methods
 
