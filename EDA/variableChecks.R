@@ -1,4 +1,5 @@
 ##### Library #####
+library(glmnet)
 
 ##### Load data #####
 df = readRDS("~/Documents/masters_paper/data-processing/Data/tennisHistoryProcess.rds")
@@ -33,8 +34,8 @@ table(df$won, df$player_prior_outcome)
 
 # Rest 
 table(df$opp_rest) # weird no games 1-5 day apart
-
 table(df[df$same_tourn == TRUE, ]$player_rest, df[df$same_tourn == TRUE, ]$opp_rest)
+# Turns out we only get the tournament date, not the match date
 
 ##### GLM ##### weird symmetries
 
@@ -46,10 +47,11 @@ m3 <- glm(won ~ player_rank_points + opp_rank_points + opp_prior_minutes +
             player_prior_minutes, data = df, family = binomial)
 
 m4 <- glm(won ~ player_rank_points + opp_rank_points + opp_prior_minutes +
-            player_prior_minutes + opp_prior_surface + player_prior_surface, data = df, family = binomial)
+            player_prior_minutes, data = df[same_tourn == TRUE], family = binomial)
 
 m5 <- glm(won ~ player_rank_points + opp_rank_points + opp_prior_minutes +
             player_prior_minutes + opp_prior_surface + player_prior_surface +
             is.na(df$player_seed) + is.na(df$opp_seed), data = df, family = binomial)
 
-is.na(df$player_seed), is.na(df$opp_seed)
+# GLM, GLMNet, XGboost
+
