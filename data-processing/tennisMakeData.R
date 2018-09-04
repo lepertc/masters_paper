@@ -15,7 +15,7 @@ df = rbindlist(out_m, fill = TRUE)[, 1:49]
 df = df[is.na(minutes) == FALSE]
 
 df = df[, c("tourney_name", "winner_id", "loser_id", "tourney_date", "surface", 
-            "winner_seed", "winner_rank", "winner_rank_points", "loser_rank", 
+            "winner_seed", "loser_seed", "winner_rank", "winner_rank_points", "loser_rank", 
             "loser_rank_points", "best_of", "round", "minutes")]
 
 ##### Process Variables #####
@@ -44,7 +44,7 @@ df_hist[, date_order := rank(Date, ties.method = "first"), by = "Player"]
 
 ##### Get prior match
 df_prior = df_hist
-df_prior$date_order = df_prior$date_order - 1
+df_prior$date_order = df_prior$date_order + 1
 
 names(df_prior) = paste("prior_", names(df_prior), sep = "")
 
@@ -53,7 +53,7 @@ by.y = c("prior_date_order", "prior_Player"))
 
 df_prior_info = df_hist[, c("Player", "Date", "round", "prior_round", "prior_minutes",
                             "prior_outcome", "prior_tourney_name", "prior_surface",
-                            "prior_best_of")]
+                            "prior_best_of", "prior_Date")]
 
 df_prior_info_w = df_prior_info
 names(df_prior_info_w) = paste("w_", names(df_prior_info_w), sep = "")
@@ -63,8 +63,25 @@ names(df_prior_info_l) = paste("l_", names(df_prior_info_l), sep = "")
 df = merge(df, df_prior_info_w, by.x = c("Date", "winner_id", "round"), by.y = c("w_Date", "w_Player", "w_round"))
 df = merge(df, df_prior_info_l, by.x = c("Date", "loser_id", "round"), by.y = c("l_Date", "l_Player", "l_round"))
 
-df$winner_won = 1
-df$loser_won = 0
+##### One row per player-match #####
+
+df_w = df
+df_l = df
+
+names(df_w) = gsub("winner_", "player_", names(df_w))
+names(df_w) = gsub("w_", "player_", names(df_w))
+names(df_w) = gsub("loser_", "opp_", names(df_w))
+names(df_w) = gsub("l_", "opp_", names(df_w))
+
+names(df_l) = gsub("winner_", "opp_", names(df_l))
+names(df_l) = gsub("w_", "opp_", names(df_l))
+names(df_l) = gsub("loser_", "player_", names(df_l))
+names(df_l) = gsub("l_", "player_", names(df_l))
+
+df_w$won = 1
+df_l$won = 0
+
+df = rbind(df_w, df_l)
 
 saveRDS(df, "/Users/chloelepert/Documents/masters_paper/data-processing/Data/tennisHistory.rds")
 
