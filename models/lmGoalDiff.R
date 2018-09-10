@@ -4,6 +4,7 @@ library(ggplot2); theme_set(theme_bw())
 
 ##### Load data #####
 df = readRDS("~/Documents/masters_paper/data-processing/Data/teamHistoryProcessed.rds")
+df = df$df
 
 ##### Goal difference #####
 df$goal_diff = sqrt(df$hgoal) - sqrt(df$vgoal)

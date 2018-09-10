@@ -14,4 +14,20 @@ df = df[h_rest <= 8 & v_rest <= 8]
 # Rest as binary variable
 df$h_rest_bin = df$h_rest > 5
 df$v_rest_bin = df$v_rest > 5
-saveRDS(df, "~/Documents/masters_paper/data-processing/Data/teamHistoryProcessed.rds")
+
+df$outcome = "Tie"
+df$outcome[df$hgoal > df$vgoal] = "Home Win"
+df$outcome[df$hgoal < df$vgoal] = "Visitor Win"
+df$outcome = factor(df$outcome, levels = c("Visitor Win", "Tie", "Home Win"))
+
+##### Name variables #####
+df_home = df
+df_vis = df
+
+names(df_home) = gsub("h_", "Team_", names(df_home))
+names(df_home) = gsub("v_", "Opp_", names(df_home))
+
+names(df_vis) = gsub("v_", "Team_", names(df_vis))
+names(df_vis) = gsub("h_", "Opp_", names(df_vis))
+
+saveRDS(list(df = df, df_home = df_home, df_vis = df_vis), "~/Documents/masters_paper/data-processing/Data/teamHistoryProcessed.rds")
