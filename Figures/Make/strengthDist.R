@@ -6,6 +6,8 @@ library(tidyr)
 ##### Executed Statements #####
 df = readRDS("~/Documents/masters_paper/data-processing/Data/teamHistoryProcessed.rds")
 
+df = df$df
+
 df_h = df[, list(h_att_str = mean(h_att_str), h_def_weak = mean(h_def_weak)), by = c("home", "Season")]
 df_v = df[, list(v_att_str = mean(v_att_str), v_def_weak = mean(v_def_weak)), by = c("visitor", "Season")]
 names(df_h) = c("Team", "Season", "Attacking Strength", "Defensive Weakness")
