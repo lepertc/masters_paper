@@ -1,5 +1,6 @@
 ##### Library #####
 library(data.table)
+library(stringr)
 
 ##### Load data #####
 setwd("/Users/chloelepert/Documents/masters_paper/data-processing/Raw-Data/atp-matches-dataset")
@@ -16,7 +17,7 @@ df = df[is.na(minutes) == FALSE]
 
 df = df[, c("tourney_name", "winner_id", "loser_id", "tourney_date", "surface", 
             "winner_seed", "loser_seed", "winner_rank", "winner_rank_points", "loser_rank", 
-            "loser_rank_points", "best_of", "round", "minutes")]
+            "loser_rank_points", "best_of", "round", "minutes", "score")]
 
 ##### Process Variables #####
 
@@ -26,15 +27,33 @@ df$Date = as.Date(paste(substr(df$tourney_date, 1, 4), substr(df$tourney_date, 5
 df$winner_id = as.factor(df$winner_id)
 df$loser_id = as.factor(df$loser_id)
 
+df$retired = grepl("RET", df$score)
+df$tie_break = 1 + 2*as.numeric(str_extract(str_extract(df$score, "\\([0-9]{1,2}\\)"), "[0-9]{1,2}"))
+df$score = gsub("\\([0-9]{1,2}\\)", "", df$score)
+df$score = gsub(" RET", "", df$score)
+df$game = strsplit(df$score, " |-")
+df$set = as.numeric(str_count(df$score, "-")) + 1
+
+
+out = c()
+for(i in df$game){
+  out[length(out) + 1] = sum(as.numeric(i))
+}
+
+df$game = out
+df$tie_break[is.na(df$tie_break)] = 0
+
+df$game = df$game + df$tie_break
+
 ##### Get player histories #####
 
 df_win = df[, c("tourney_name", "winner_id", "Date", "surface", "best_of", 
-                "round", "minutes")]
+                "round", "minutes", "game", "set")]
 df_win$outcome = "Win"
 names(df_win)[2] = "Player"
 
 df_los = df[, c("tourney_name", "loser_id", "Date", "surface", "best_of", 
-                "round", "minutes")]
+                "round", "minutes", "game", "set")]
 df_los$outcome = "Lose"
 names(df_los)[2] = "Player"
 
@@ -53,7 +72,7 @@ by.y = c("prior_date_order", "prior_Player"))
 
 df_prior_info = df_hist[, c("Player", "Date", "round", "prior_round", "prior_minutes",
                             "prior_outcome", "prior_tourney_name", "prior_surface",
-                            "prior_best_of", "prior_Date")]
+                            "prior_best_of", "prior_Date", "prior_game", "prior_set")]
 
 df_prior_info_w = df_prior_info
 names(df_prior_info_w) = paste("w_", names(df_prior_info_w), sep = "")

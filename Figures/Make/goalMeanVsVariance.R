@@ -4,7 +4,7 @@ library(data.table)
 
 ##### Load Data #####
 df = readRDS("~/Documents/masters_paper/data-processing/Data/teamHistory.rds")
-df = as.data.table(df$df)
+df = as.data.table(df)
 
 df_mean_var_h = df[, list(mean = mean(hgoal), variance = var(hgoal)), 
                    by = c("Season", "home")]

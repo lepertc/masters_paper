@@ -2,7 +2,9 @@
 title: "Effect of rest on soccer and tennis match outcomes"
 author: "Chloé Lepert"
 date: "8/9/2018"
-output: pdf_document
+output: 
+  pdf_document:
+    number_sections: true
 header-includes:
 - \usepackage{float}
 ---
@@ -10,13 +12,14 @@ header-includes:
 ```{r include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE)
 library(ggplot2); theme_set(theme_bw())
+library(stargazer)
 ```
 
-# 1. Introduction
+# Introduction
 
-Many factors influence athletic performance in competitions. Most models aiming to predict results focus on the strength of the team and location of the competition, but other factors that players and teams can control could have an impact. In this paper we will look at how rest and tiredness impact the performance of soccer teams and tennis players. 
+Many factors influence athletic performance in competitions. Most models preicting results focus on the strength of the team and location of the competition, but other factors that players and teams can control could have an impact. In this paper we will look at how rest and tiredness impact the performance of soccer teams and tennis players. 
 
-## 1.1 Question 
+## Question 
 
 We aim to quantify the effect of rest on Football match outcomes. We ask two questions looking at short and long term rest levels of a team:
 
@@ -26,9 +29,15 @@ We aim to quantify the effect of rest on Football match outcomes. We ask two que
     
 \end{enumerate}
 
+For tennis we look at the effect of the previous match attributes on match outcomes. We ask the quest
+
+\begin{enumerate}
+  \item How does length of the previous match impact performance?
+\end{enumerate}
+
 We will look at different models in which performance will either be the probability of winning, drawing, and losing or the expected number of goals scored.
 
-## 1.2 English Football
+## English Football
 
 Before explaining our motivation we will first given an overview of the English and European soccer system so that the reader may better understand our motivation. 
 
@@ -56,22 +65,47 @@ source("~/Documents/masters_paper/Figures/Make/gameLoad.R")
 p
 ```
 
-## 1.2 Relevance
+
+## Men's professional tennis
+
+Throughout the season players will play in a variety of tournaments. Performance in the tournament will determine the number of points earned towards the players' world rankiings. Tournaments have difference importances which influences how many points they grant players. 
+
+A player's ranking influences the players seeding in individual tournaments which is designed to have top players face each other in the semis and finals. 
+
+Professional tennis is played in matchs of 3 or 5 sets. The four main tournaments: Australlian Open, Rolland Garros, Wimbledon, and US open are played in 5 sets, which the rest of tournaments are played in 3 sets. The first player to win 2 or three sets wins. 
+
+The winning mechanism allows for games of different time length the distribution of which is shown bellow. 
+
+```{r, cache = FALSE}
+source("~/Documents/masters_paper/Figures/Make/tennisData.R")
+p1
+```
+
+As set is won by obtaining at least 6 points and a 2 point lead resulting in games of different intensities; A game could be won 6-1, of 10-8. The distribution of the number of games is shown bellow along.
+
+```{r}
+p2
+```
+
+## Relevance
 
 Football game scheduling varies from league to league. In particular, some leagues take a winter break while others do not. Some speculate that this winter break influences performance in inter-league competitions such as the Champions and Europa league by allowing teams that have the break to be more refreshed. \cite{Winter}
 
 Further Champions and Europa league games are played Tuesday through Thursday, while club games are played Friday through Mondays, leading to a variety of rest days going into Champions and Europa league games. (NEED CITATION) Some leagues are more willing to accommodate teams playing in European competitions than others by letting them schedule their games earlier in the weekend.
 
-## 1.3 Approach
+An effect of previous matches on present matches could have an effect on how matches are played. If player's know that long matches hurt them in the long run, they might work harder to win quickly. Of course, we also need to measure the LR effect of working harder before making such a suggestion.
+
+## Approach
 
 While we would ideally want to look at how rest affects performance in european competitions doing so is difficult because the teams that play each other in European competitions do not do so enough for us to calculate and control for team ability on an even scale. We will instead model the outcome of Premier League matches, which are set up such that we can easily control for team ability. We will evaluate how matches in competitions other than the premier league influence premier league matches.
 
 This approach assumes that European competition games are similar Premier League games. This is mostly true except for the fact that European competition games can result in overtime and are higher stakes; a loss results in elimination. We assume that if we see rest impact outcomes in premier league games, rest is likely to have an impact in European games. 
 
+For tennis we measure the effects of previous match attributes on the next match. We look at how these effects differ by surface and whether the match is best of 3 or best of 5.
 
-## 1.4 Literature review
+## Literature review
 
-### 1.4.1 Rest time
+### Rest time
 
 Most of research on impacts of game scheduling focuses on injury and measures of certain activities in games (distance ran, number of sprints, etc.), but not on overall game outcomes. 
 
@@ -79,20 +113,66 @@ Over the past decades, Carlos Lago Penas conducted a series of study looking at 
 
 In 2010, Dupont et al. found a higher injury rates for football players who played two matches a week compared to players playing 1 match a week.
 
-### 1.4.2 Modeling match outcomes
+### Modeling match outcomes
 
 In 1982, M. J. Maher introduced 2 independent Poisson distributions as a way to model soccer scores. He proposed using a team's attacking strength and its oponent's defensive weakness as predictors of number of goals scores. Maher also found that using a Bivariate Poisson distribution with a correlation of 0.2 improved his model's fit. \cite{Maher}
 
 In 2003, Karlis and Ntzoufras proposed a diagonal inflated bivariate Poisson model in which the probabilities of draws are increased. \cite{karlis} They also created an R package to fit biavariate Poisson GLMs which we will utilize. \cite{bivpois}
 
 
-## 1.5 Data
+## Data
 
-### 1.5.1 Data set
+### Tennis
+
+#### Data set
+
+The data was obtained from Kaggle and contains outcomes and attributes of ATP Mens tennis matches between 2000 and 2017. We split each game into two rows one for each player.
+
+#### Response variable
+
+The response variable is whether or not a player won a game. As players have to either win or lose, the response variable is distributed 50-50 win-lose.
+
+#### Predictors
+
+The predictor is the length of the prior match played by the player in minutes. Three quarters of the games are less than 2 hours long, but games can go on for many more hours. In fact, about five percent of games go on for more than 3 hours.
+
+```{r, cache = FALSE}
+source("~/Documents/masters_paper/Figures/Make/tennisData.R")
+```
+
+#### Control variables
+
+We control for player ability by looking at the player's rank at the beggining of the tournament as well as the number of points earned in order to achieve the ranking. Both came out to be important in predicting winners. They differ slightly in that the player ranked number 1 could be leading by a few points or hundreds of point. The broader scale of ranking points provides a better proxy for underlying player ability.
+
+We control also control for whether or not a player is seeded. Seeded players tend to be the top __ players in the tournement and do not have to play as many early rounds.
+
+We also look at whether or not the effects differ by surface, the number of sets needed to win, and the round of the match.
+
+##### Surface
+
+Tennis is either played on Carpet, Clay, Grass, or Hard. Players will have preference for different surfaces and some surfaces are often cited as causes for injuries. The distribution of surfaces is shown bellow.
+
+```{r results = "asis"}
+stargazer(s, summary = FALSE, no.space = TRUE, header = FALSE, 
+          table.placement = "H", type = "latex", 
+          title = "Distribution of matches by surface")
+```
+
+
+##### Sets needed to win
+
+Most men's tennis matches are won by a player winning 2 sets. The four major tournaments: Rolland Garros, Wimbledon, US Open, and Australian open require 3 sets to be won in order to win
+
+#### Games looked at
+
+We look at all matches for which both players played their previous match in the same tournament. This allows us to make sure that the previous match happened within a reasonable number of days.
+
+### Soccer
+#### Data set
 
 The R package "engsoccerdata" provides us with scores from matches in England as well as European competition matches. \cite{Curley} We limit ourselves to matches occurring in seasons 1995 through 2015. The design of English Football stays consistent throughout this time range and the data set is complete for these years.
 
-### 1.5.2 Response variable
+#### Response variable
 
 We use two different response variables: 1. The number of home and away goals and 2. Weather the a team won, tied, or lost. The distribution of home and away goals is shown bellow.
 
@@ -124,7 +204,7 @@ Visitor win & $1,187$ & $0.276$ \\
 \end{tabular} 
 \end{table} 
 
-### 1.5.3 Predictors
+#### Predictors
 
 Using this data set we calculate the number of days since the previous game. Before performing out analysis on the effect of rest time we remove games in which either of the team's previous game was over 8 days ago. If team's last non-international game was more than 8 days prior, it is possible that an international break previous happened which we have no way of controlling for. 
 
@@ -167,7 +247,7 @@ Away & 1-5 days & $1,256$ & $512$ \\
 \end{tabular} 
 \end{table} 
 
-### 1.5.4 Control variables
+#### Control variables
 
 Using Premier games we calculate a teams attacking and defensive weakness. \cite{Cronin} The attacking strength is the ratio of the average number of goals score by a team in a season to the average number of goals scored in the league that season. The defensive weakness is the ratio of the average number of goal conceded by a team in a season to the average number of goals conceded in the league that season. For each team the attacking strength and defensive weakness are computed for home and away games. The better a team the higher its attacking strength and the lower its defensive weakness strength will be. We will use the previous years attacking and defensive weakness to control for a team's ability. We exclude recently promoted teams from our analysis as we cannot use their previous season to calculate such strengths. The distribution of attacking and defensive strengths is shown below.
 
@@ -178,7 +258,7 @@ p
 
 We also control for the number of games a team plays each season. Better teams will last longer in in playoff competitions (FA Cup, Europa/Champions League, etc.) that happen concurrently with premier league games. These teams will play more games per season and thus on average have lower rest times. In particular, the design of the premier league in which each pair of teams plays each other once at each team's home stadium allows to easily calculate attacking strength and defensive weakness.
 
-### 1.5.5 Matches looked at
+#### Matches looked at
 
 As described in the previous subsections there are two points at which we remove premier league games from our data set.
 \begin{enumerate}
@@ -186,13 +266,13 @@ As described in the previous subsections there are two points at which we remove
   \item{Matches with over 8 days of rest. It is likely that an international match happened during the break which we do not have in our data. Leaving these matches in would lead to low rest matches presenting themselves as high rest matches. Removing these matches removes 1144 out of 5440 matches (21\%).}
 \end{enumerate}
 
-# 2 Methods
+# Methods
 
-## 2.1 Poisson model
+## Poisson model
 
 The Poisson model is most commonly used to model soccer scores. It assumes that the number of goals scored by a team in a soccer game follows a Poisson distribution of some parameter. We will use a GLM with a poisson link to predict the parameter. 
 
-### 2.1.1 Model
+### Model
 
 \begin{itemize}
     \item Let $j={h, a}$ be an indicator for whether we are modeling home or away games.
@@ -202,7 +282,7 @@ The Poisson model is most commonly used to model soccer scores. It assumes that 
     \item The parameter $\lambda_j$ is a linear combination of the predictors $X_j$: $\lambda_j = X_j \beta_j$  
 \end{itemize}
 
-### 2.1.2 Verifying the Poisson assumption under the null
+### Verifying the Poisson assumption under the null
 
 One of the defining features of the Poisson model is the fact that the mean of a Poisson distribution equals it's variance. As the figure below shows for most teams this equality holds. 
 
@@ -212,7 +292,7 @@ p
 ```
 
 
-## 2.2 Linear model for goal difference
+## Linear model for goal difference
 
 The square root of a poisson distribution can be approximated by a nornal distribution (cite). We can therefore approximate the difference in square root goals as the difference of two normal distributions, which is itself a normal distribution. This allows us to fit a normal model to the transformed goal difference. The figure below shows the distribution of normal goal difference and its approximation as a normal distribution.
 
@@ -228,7 +308,7 @@ $\sqrt{G_{h,i}} - \sqrt{G_{v,i}} = X_j \beta_j$
 
 In this model we could use difference in the number of rest days as a predictor instead of number of rest days for the home team and number of rest days for the away team. Using the difference in rest as a predictor is equivalent to using the the rest days for the home team and away teams and forcing their coefficients in the model to be the opposite. We chose to not add this constraints and allow home and away rest to vary freely.
 
-## 2.3 Proportional odds cummulative logit model
+## Proportional odds cummulative logit model
 
 We have 3 possible outcomes: home win, tie, or visitor win. Each outcome has a probability $\pi_i$ of happening. The probabilities of the three outcomes sum to 1 as no other outcome is possible.
 $\pi_h +\pi_t +\pi_v = 1$
@@ -249,6 +329,12 @@ p
 ```
 
 $\alpha_v$ can be though of as the threshold in ability to go from a tie or home win to a visitor win and $\alpha_t$ as the threshold to go from a home win to a tie or visitor win or tie. Depending on the distribution of underlying ability, the probability of each outcome changes. In the figure above if the feature is matched, the probability of a win is 78\% but if the feature is not matched the probability of a win is 42\%.
+
+The 2 outcome case of this model is known as logistic regression. We will use it to model the outcome of tennis matches.
+
+## Logistic regression
+
+Logistic regression assumes that the log odds of the probability of an event in this case a win are given by a linear combination of the predictors. The model can be written as $\log{\big(\frac{p}{1-p}\big)}=X\beta$ where the first column of X is filled with ones for the intercept. 
 
 # Results
 
@@ -386,9 +472,117 @@ Observations & 4,296 & 4,296 \\
 \end{tabular} 
 \end{table} 
 
+
+## Logistic GLM
+
+In the simplest model looking at how the difference in minutes of the previous matches affects the probability fo winning we see that having played a longer previous match than one's oponent increases the probabibility of winning. However when we control for the difference in ranking points between the two players the effect dissapears. 
+
+When we look at the effect by best of quantity we find a positive effect on winning probability for best of three matches and a negative effect on winning probability for best of five matches. 
+
+We then look at how surface plays a role and find no significant effect except prior match length increasing probability of winning for clay surfaces. 
+
+We then split the surface effects by best of quantity and see that clay only increases probability of winning on best of three matches. We also see some effects for grass and hard surfaces. As previously seen the effects are positive for best of three matches and negative for best of five matches.
+
+\begin{table}[H] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{5}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-6} 
+\\[-1.8ex] & \multicolumn{5}{c}{won} \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4) & (5)\\ 
+\hline \\[-1.8ex] 
+ delta\_minutes & 0.0004$^{***}$ & 0.0002 &  &  &  \\ 
+  & (0.0001) & (0.0001) &  &  &  \\ 
+  & & & & & \\ 
+ delta\_rank\_pts &  & 0.0005$^{***}$ & 0.0005$^{***}$ & 0.0005$^{***}$ & 0.0005$^{***}$ \\ 
+  &  & (0.00001) & (0.00001) & (0.00001) & (0.00001) \\ 
+  & & & & & \\ 
+ delta\_minutes:as.factor(best\_of)3 &  &  & 0.001$^{***}$ &  &  \\ 
+  &  &  & (0.0002) &  &  \\ 
+  & & & & & \\ 
+ delta\_minutes:as.factor(best\_of)5 &  &  & $-$0.002$^{***}$ &  &  \\ 
+  &  &  & (0.0003) &  &  \\ 
+  & & & & & \\ 
+ delta\_minutes:surfaceCarpet &  &  &  & $-$0.0003 &  \\ 
+  &  &  &  & (0.001) &  \\ 
+  & & & & & \\ 
+ delta\_minutes:surfaceClay &  &  &  & 0.001$^{***}$ &  \\ 
+  &  &  &  & (0.0002) &  \\ 
+  & & & & & \\ 
+ delta\_minutes:surfaceGrass &  &  &  & $-$0.001 &  \\ 
+  &  &  &  & (0.0004) &  \\ 
+  & & & & & \\ 
+ delta\_minutes:surfaceHard &  &  &  & 0.00003 &  \\ 
+  &  &  &  & (0.0002) &  \\ 
+  & & & & & \\ 
+ delta\_minutes:as.factor(best\_of)3:surfaceCarpet &  &  &  &  & $-$0.0002 \\ 
+  &  &  &  &  & (0.001) \\ 
+  & & & & & \\ 
+ delta\_minutes:as.factor(best\_of)5:surfaceCarpet &  &  &  &  & $-$0.004 \\ 
+  &  &  &  &  & (0.011) \\ 
+  & & & & & \\ 
+ delta\_minutes:as.factor(best\_of)3:surfaceClay &  &  &  &  & 0.001$^{***}$ \\ 
+  &  &  &  &  & (0.0003) \\ 
+  & & & & & \\ 
+ delta\_minutes:as.factor(best\_of)5:surfaceClay &  &  &  &  & $-$0.001 \\ 
+  &  &  &  &  & (0.001) \\ 
+  & & & & & \\ 
+ delta\_minutes:as.factor(best\_of)3:surfaceGrass &  &  &  &  & 0.001$^{***}$ \\ 
+  &  &  &  &  & (0.001) \\ 
+  & & & & & \\ 
+ delta\_minutes:as.factor(best\_of)5:surfaceGrass &  &  &  &  & $-$0.003$^{***}$ \\ 
+  &  &  &  &  & (0.001) \\ 
+  & & & & & \\ 
+ delta\_minutes:as.factor(best\_of)3:surfaceHard &  &  &  &  & 0.0004$^{*}$ \\ 
+  &  &  &  &  & (0.0002) \\ 
+  & & & & & \\ 
+ delta\_minutes:as.factor(best\_of)5:surfaceHard &  &  &  &  & $-$0.001$^{***}$ \\ 
+  &  &  &  &  & (0.0004) \\ 
+  & & & & & \\ 
+ Constant & 0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 \\ 
+  & (0.007) & (0.007) & (0.007) & (0.007) & (0.007) \\ 
+  & & & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 90,574 & 90,574 & 90,574 & 90,574 & 90,574 \\ 
+Log Likelihood & $-$62,775.010 & $-$57,235.310 & $-$57,213.680 & $-$57,230.860 & $-$57,206.160 \\ 
+Akaike Inf. Crit. & 125,554.000 & 114,476.600 & 114,435.400 & 114,473.700 & 114,432.300 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{5}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
 # Discusion
 
-## Importance of game load
+## Soccer
+
+### Comparison of models 
+
+\begin{itemize}
+  \item Team effects agree
+  \item Which model is most valid
+\end{itemize}
+
+### Rest as days or as binary
+
+### Importance of game load
+
+## Tennis
+
+### Importance of controlling for ranking points
+
+### How might the effect not be valid?
+
+## Comparison of sports
+
+### Why is it easier to pick up effects on tennis
+
+\begin{itemize}
+  \item One player vs. many. Football manager can control how tired his players are by rotating players something which tennis players cannot do.
+  \item Larger variation in the predictor for tennis
 
 # Conclusion
 
@@ -401,4 +595,3 @@ Observations & 4,296 & 4,296 \\
 * in 1.1 Do we still care about long term?
 * 2.1.2 Remake the figure
 
-* Fix all the numbering
