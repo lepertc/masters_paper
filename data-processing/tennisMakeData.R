@@ -48,12 +48,12 @@ df$game = df$game + df$tie_break
 ##### Get player histories #####
 
 df_win = df[, c("tourney_name", "winner_id", "Date", "surface", "best_of", 
-                "round", "minutes", "game", "set")]
+                "round", "minutes", "game", "set", "retired")]
 df_win$outcome = "Win"
 names(df_win)[2] = "Player"
 
 df_los = df[, c("tourney_name", "loser_id", "Date", "surface", "best_of", 
-                "round", "minutes", "game", "set")]
+                "round", "minutes", "game", "set", "retired")]
 df_los$outcome = "Lose"
 names(df_los)[2] = "Player"
 
@@ -72,7 +72,7 @@ by.y = c("prior_date_order", "prior_Player"))
 
 df_prior_info = df_hist[, c("Player", "Date", "round", "prior_round", "prior_minutes",
                             "prior_outcome", "prior_tourney_name", "prior_surface",
-                            "prior_best_of", "prior_Date", "prior_game", "prior_set")]
+                            "prior_best_of", "prior_Date", "prior_game", "prior_set", "prior_retired")]
 
 df_prior_info_w = df_prior_info
 names(df_prior_info_w) = paste("w_", names(df_prior_info_w), sep = "")

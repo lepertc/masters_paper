@@ -17,7 +17,7 @@ library(stargazer)
 
 # Introduction
 
-Many factors influence athletic performance in competitions. Most models preicting results focus on the strength of the team and location of the competition, but other factors that players and teams can control could have an impact. In this paper we will look at how rest and tiredness impact the performance of soccer teams and tennis players. 
+Many factors influence athletic performance in competitions. Most models predicting results focus on the strength of the team and location of the competition, but other factors that players and teams can control could have an impact. In this paper we will look at how rest and tiredness impact the performance of soccer teams and tennis players. 
 
 ## Question 
 
@@ -26,7 +26,6 @@ We aim to quantify the effect of rest on Football match outcomes. We ask two que
 \begin{enumerate}
     \item How does the number of days since a previous match impact the performance of a team?
     \item How the the game load of a team in the past month, 2 month, and 3 month impact the performance of a team?
-    
 \end{enumerate}
 
 For tennis we look at the effect of the previous match attributes on match outcomes. We ask the quest
@@ -68,11 +67,11 @@ p
 
 ## Men's professional tennis
 
-Throughout the season players will play in a variety of tournaments. Performance in the tournament will determine the number of points earned towards the players' world rankiings. Tournaments have difference importances which influences how many points they grant players. 
+Throughout the season players will play in a variety of tournaments. Performance in tournaments determines the number of points earned towards the players' world rankings. Tournaments have difference importances influencing how many points they grant players. 
 
-A player's ranking influences the players seeding in individual tournaments which is designed to have top players face each other in the semis and finals. 
+A player's ranking determines the players seeding in individual tournaments. Officials design seedings to have top players face each other as late in the tournament as possible.
 
-Professional tennis is played in matchs of 3 or 5 sets. The four main tournaments: Australlian Open, Rolland Garros, Wimbledon, and US open are played in 5 sets, which the rest of tournaments are played in 3 sets. The first player to win 2 or three sets wins. 
+Professional tennis is played in matchs of 3 or 5 sets. The four main tournaments: Australlian Open, Rolland Garros, Wimbledon, and US open are played in 5 sets, while the rest of tournaments are played in 3 sets. The first player to win 2 or 3 sets wins. 
 
 The winning mechanism allows for games of different time length the distribution of which is shown bellow. 
 
@@ -81,7 +80,7 @@ source("~/Documents/masters_paper/Figures/Make/tennisData.R")
 p1
 ```
 
-As set is won by obtaining at least 6 points and a 2 point lead resulting in games of different intensities; A game could be won 6-1, of 10-8. The distribution of the number of games is shown bellow along.
+As set is won by winning at least 6 games and having a 2 game lead resulting in sets of different intensities; A set could be won 6-1, of 10-8. The distribution of the number of games is shown bellow along.
 
 ```{r}
 p2
@@ -134,7 +133,7 @@ The response variable is whether or not a player won a game. As players have to 
 
 #### Predictors
 
-The predictor is the length of the prior match played by the player in minutes. Three quarters of the games are less than 2 hours long, but games can go on for many more hours. In fact, about five percent of games go on for more than 3 hours.
+The predictor is the length of the previous match played by the player in minutes. Three quarters of the games are less than 2 hours long, but games can go on for many more hours. In fact, about five percent of games go on for more than 3 hours.
 
 ```{r, cache = FALSE}
 source("~/Documents/masters_paper/Figures/Make/tennisData.R")
@@ -142,9 +141,9 @@ source("~/Documents/masters_paper/Figures/Make/tennisData.R")
 
 #### Control variables
 
-We control for player ability by looking at the player's rank at the beggining of the tournament as well as the number of points earned in order to achieve the ranking. Both came out to be important in predicting winners. They differ slightly in that the player ranked number 1 could be leading by a few points or hundreds of point. The broader scale of ranking points provides a better proxy for underlying player ability.
+We control for player ability by looking at the player's rank at the beggining of the tournament as well as the number of points earned in order to achieve the ranking. Both controls are important in predicting winners. They differ slightly in that the player ranked number 1 could be leading by a few points or hundreds of point. The broader scale of ranking points provides a better proxy for underlying player ability.
 
-We control also control for whether or not a player is seeded. Seeded players tend to be the top __ players in the tournement and do not have to play as many early rounds.
+We control also control for whether or not a player is seeded. Seeded players tend to be the top 32 players in the tournement and do not have to play as many early rounds.
 
 We also look at whether or not the effects differ by surface, the number of sets needed to win, and the round of the match.
 
@@ -165,7 +164,7 @@ Most men's tennis matches are won by a player winning 2 sets. The four major tou
 
 #### Games looked at
 
-We look at all matches for which both players played their previous match in the same tournament. This allows us to make sure that the previous match happened within a reasonable number of days.
+We look at all matches for which both players played their previous match in the same tournament. This allows us to make sure that the previous match happened within a reasonable number of days and that surface and best of quantity are the same between player histories
 
 ### Soccer
 #### Data set
@@ -334,7 +333,7 @@ The 2 outcome case of this model is known as logistic regression. We will use it
 
 ## Logistic regression
 
-Logistic regression assumes that the log odds of the probability of an event in this case a win are given by a linear combination of the predictors. The model can be written as $\log{\big(\frac{p}{1-p}\big)}=X\beta$ where the first column of X is filled with ones for the intercept. 
+Logistic regression allows us to model binary outcomes where one outcome, here a win, happens with probability p and the other, here a loss, happens with probability 1-p. Logistic regression assumes that the log odds of the probability of the event are given by a linear combination of the predictors. The model can be written as $\log{\big(\frac{p}{1-p}\big)}=X\beta$ where the first column of X is filled with ones for the intercept and the other columns are the predictors. 
 
 # Results
 
@@ -475,85 +474,27 @@ Observations & 4,296 & 4,296 \\
 
 ## Logistic GLM
 
-In the simplest model looking at how the difference in minutes of the previous matches affects the probability fo winning we see that having played a longer previous match than one's oponent increases the probabibility of winning. However when we control for the difference in ranking points between the two players the effect dissapears. 
+In the simplest model looking at how the difference in minutes of the previous matches affects the probability of winning we see that having played a longer previous match than one's oponent increases the probabibility of winning. We then look for diminishing effect of the number of prior minutes played by looking at the importance of minutes played squared and find no diminishing effects.  
+
+When we control for the difference in ranking points between the two players the effect dissapears. Further, controlling for whether or no a player or his oponent was seeded further helps predict tennis match outcomes.
+
+```{r results = "asis", cache = FALSE}
+source("~/Documents/masters_paper/models/tennisLog.R")
+stargazer(m0, m02, m1, m2, no.space = TRUE, header = FALSE, table.placement = "H", 
+          type = "latex", title = "Logistic model for the probability of winning a tennis match")
+```
 
 When we look at the effect by best of quantity we find a positive effect on winning probability for best of three matches and a negative effect on winning probability for best of five matches. 
 
-We then look at how surface plays a role and find no significant effect except prior match length increasing probability of winning for clay surfaces. 
+We then look at how surface plays a role we find that prior match length increases probability of winninf for clay surfaces and decreases probability of winning for grass surfaces. 
 
-We then split the surface effects by best of quantity and see that clay only increases probability of winning on best of three matches. We also see some effects for grass and hard surfaces. As previously seen the effects are positive for best of three matches and negative for best of five matches.
+We then split the surface effects by best of quantity and see that clay only increases probability of winning on best of three matches and grass only decreases the probability of winning for best of 5 matches. As previously seen the effects are positive for best of three matches and negative for best of five matches.
 
-\begin{table}[H] \centering 
-  \caption{} 
-  \label{} 
-\begin{tabular}{@{\extracolsep{5pt}}lccccc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- & \multicolumn{5}{c}{\textit{Dependent variable:}} \\ 
-\cline{2-6} 
-\\[-1.8ex] & \multicolumn{5}{c}{won} \\ 
-\\[-1.8ex] & (1) & (2) & (3) & (4) & (5)\\ 
-\hline \\[-1.8ex] 
- delta\_minutes & 0.0004$^{***}$ & 0.0002 &  &  &  \\ 
-  & (0.0001) & (0.0001) &  &  &  \\ 
-  & & & & & \\ 
- delta\_rank\_pts &  & 0.0005$^{***}$ & 0.0005$^{***}$ & 0.0005$^{***}$ & 0.0005$^{***}$ \\ 
-  &  & (0.00001) & (0.00001) & (0.00001) & (0.00001) \\ 
-  & & & & & \\ 
- delta\_minutes:as.factor(best\_of)3 &  &  & 0.001$^{***}$ &  &  \\ 
-  &  &  & (0.0002) &  &  \\ 
-  & & & & & \\ 
- delta\_minutes:as.factor(best\_of)5 &  &  & $-$0.002$^{***}$ &  &  \\ 
-  &  &  & (0.0003) &  &  \\ 
-  & & & & & \\ 
- delta\_minutes:surfaceCarpet &  &  &  & $-$0.0003 &  \\ 
-  &  &  &  & (0.001) &  \\ 
-  & & & & & \\ 
- delta\_minutes:surfaceClay &  &  &  & 0.001$^{***}$ &  \\ 
-  &  &  &  & (0.0002) &  \\ 
-  & & & & & \\ 
- delta\_minutes:surfaceGrass &  &  &  & $-$0.001 &  \\ 
-  &  &  &  & (0.0004) &  \\ 
-  & & & & & \\ 
- delta\_minutes:surfaceHard &  &  &  & 0.00003 &  \\ 
-  &  &  &  & (0.0002) &  \\ 
-  & & & & & \\ 
- delta\_minutes:as.factor(best\_of)3:surfaceCarpet &  &  &  &  & $-$0.0002 \\ 
-  &  &  &  &  & (0.001) \\ 
-  & & & & & \\ 
- delta\_minutes:as.factor(best\_of)5:surfaceCarpet &  &  &  &  & $-$0.004 \\ 
-  &  &  &  &  & (0.011) \\ 
-  & & & & & \\ 
- delta\_minutes:as.factor(best\_of)3:surfaceClay &  &  &  &  & 0.001$^{***}$ \\ 
-  &  &  &  &  & (0.0003) \\ 
-  & & & & & \\ 
- delta\_minutes:as.factor(best\_of)5:surfaceClay &  &  &  &  & $-$0.001 \\ 
-  &  &  &  &  & (0.001) \\ 
-  & & & & & \\ 
- delta\_minutes:as.factor(best\_of)3:surfaceGrass &  &  &  &  & 0.001$^{***}$ \\ 
-  &  &  &  &  & (0.001) \\ 
-  & & & & & \\ 
- delta\_minutes:as.factor(best\_of)5:surfaceGrass &  &  &  &  & $-$0.003$^{***}$ \\ 
-  &  &  &  &  & (0.001) \\ 
-  & & & & & \\ 
- delta\_minutes:as.factor(best\_of)3:surfaceHard &  &  &  &  & 0.0004$^{*}$ \\ 
-  &  &  &  &  & (0.0002) \\ 
-  & & & & & \\ 
- delta\_minutes:as.factor(best\_of)5:surfaceHard &  &  &  &  & $-$0.001$^{***}$ \\ 
-  &  &  &  &  & (0.0004) \\ 
-  & & & & & \\ 
- Constant & 0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 \\ 
-  & (0.007) & (0.007) & (0.007) & (0.007) & (0.007) \\ 
-  & & & & & \\ 
-\hline \\[-1.8ex] 
-Observations & 90,574 & 90,574 & 90,574 & 90,574 & 90,574 \\ 
-Log Likelihood & $-$62,775.010 & $-$57,235.310 & $-$57,213.680 & $-$57,230.860 & $-$57,206.160 \\ 
-Akaike Inf. Crit. & 125,554.000 & 114,476.600 & 114,435.400 & 114,473.700 & 114,432.300 \\ 
-\hline 
-\hline \\[-1.8ex] 
-\textit{Note:}  & \multicolumn{5}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
-\end{tabular} 
-\end{table} 
+```{r results = "asis", cache = FALSE}
+source("~/Documents/masters_paper/models/tennisLog.R")
+stargazer(m4, m3, m5, no.space = TRUE, header = FALSE, table.placement = "H", 
+          type = "latex", title = "Effect of previous match length on winning probability by match type")
+```
 
 # Discusion
 
@@ -574,6 +515,22 @@ Akaike Inf. Crit. & 125,554.000 & 114,476.600 & 114,435.400 & 114,473.700 & 114,
 
 ### Importance of controlling for ranking points
 
+In the simplest model for the probability of winning a tennis match the difference in the length of the players previous matches is highly significant. However when we add the difference in the players' ranking points and binary variables for whether or not the players' involved are seeded, the significance of the effect dissapears suggesting some correlation between the predictors
+
+Indeed we find a correlation of 0.070 with a p-value less than 1 e-15 between a player's ranking points and the time needed to win a match. We also find that seeded players enter matches having played on average 3.87 minutes (se 0.28) more in their previous match than their unseeded oponents. Both of these findings suggest that better players play longer matches. 
+
+One hypothesis for why better players play longer match is that they are more able to put up a fight and last longer against strong oponents. If that is true we expect the length of matches of better players to increase more with the strength of their oponents than weaker players. 
+
+In the poisson model bellow in which we assume that the length of a tennis match is poisson distributed according to a parameter which is linear in the predictors we see that the length of seeded players matches increases with the ranking of their oponents more than the length of the matches of unseeded players. This supports our hypothesis that better players (proxied by seeded players), put up stronger fights against better oponents than unseeded players do.
+
+```{r results = "asis", cache = FALSE}
+source("~/Documents/masters_paper/Figures/Make/tennisDiscussion.R")
+stargazer(m1, no.space = TRUE, header = FALSE, table.placement = "H", 
+          type = "latex", title = "Effect of opponent's ranking points on match length by player seed")
+```
+
+Since a player's ability is correlated with the length of matches that player plays, it is important to control for it so that we can trully extract the effect of the length of the previous match on match outcomes. We use both rank points and seeded status of the players as controls.
+
 ### How might the effect not be valid?
 
 ## Comparison of sports
@@ -583,6 +540,7 @@ Akaike Inf. Crit. & 125,554.000 & 114,476.600 & 114,435.400 & 114,473.700 & 114,
 \begin{itemize}
   \item One player vs. many. Football manager can control how tired his players are by rotating players something which tennis players cannot do.
   \item Larger variation in the predictor for tennis
+\end{itemize}
 
 # Conclusion
 
