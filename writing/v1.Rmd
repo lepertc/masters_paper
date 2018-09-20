@@ -5,6 +5,7 @@ date: "8/9/2018"
 output: 
   pdf_document:
     number_sections: true
+fontsize: 12pt 
 header-includes:
 - \usepackage{float}
 ---
