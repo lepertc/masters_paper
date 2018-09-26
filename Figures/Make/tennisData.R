@@ -30,3 +30,8 @@ p5 <- ggplot(df_p[df_p$set != 1 & df_p$set != 6,],
 
 ##### Surface #####
 s = as.data.frame(table(df_p$surface))
+s$share = s$Freq/sum(s$Freq)
+rownames(s) = s$Var1
+s$Var1 = NULL
+  
+  
