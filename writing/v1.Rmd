@@ -536,13 +536,13 @@ stargazer(m4, m3, m5, no.space = TRUE, header = FALSE, table.placement = "H",
 
 ### Importance of controlling for ranking points
 
-In the simplest model for the probability of winning a tennis match the difference in the length of the player's previous matches are highly significant. However, when we add the difference in the players' ranking points and binary variables for whether or not the players' involved are seeded, the significance of the effect disappears suggesting some correlation between the predictors
+In the simplest model for the probability of winning a tennis match, the effect of the difference in the length of the player's previous matches is highly significant. However, when we add the difference in the players' ranking points and binary variables for whether or not the players' involved are seeded, the significance of the effect disappears suggesting some correlation between the predictors
 
-Indeed we find a correlation of 0.070 with a p-value less than 1 e-15 between a player's ranking points and the time needed to win a match. We also find that seeded players enter matches having played on average 3.87 minutes (SE 0.28) more in their previous match than their unseeded opponents. Both of these findings suggest that better players play longer matches. 
+We find a correlation of 0.070 with a p-value less than 1 e-15 between a player's ranking points and the time needed to win a match. We also find that seeded players enter matches having played on average 3.87 minutes (SE 0.28) more in their previous match than their unseeded opponents. Both of these findings suggest that better players play longer matches. 
 
 One hypothesis for why better players play longer match is that they are more able to put up a fight and last longer against strong opponents. If that is true, we expect the length of matches of better players to increase more with the strength of their opponents than weaker players. 
 
-In the Poisson model below in which we assume that the length of a tennis match is Poisson distributed according to a parameter which is linear in the predictors, we see that the length of seeded players matches increases with the ranking of their opponents more than the length of the matches of unseeded players. This supports our hypothesis that better players (proxied by seeded players), put up stronger fights against better opponents than unseeded players do.
+In the Poisson model below in which we assume that the length of a tennis match is Poisson distributed according to a parameter which is linear in the predictors, we see that the length of seeded players matches increases with the ranking of their opponents more than the length of the matches of unseeded players does. This supports our hypothesis that better players (proxied by seeded players), put up stronger fights against better opponents than unseeded players do.
 
 ```{r results = "asis", cache = FALSE}
 source("~/Documents/masters_paper/Figures/Make/tennisDiscussion.R")
@@ -552,7 +552,24 @@ stargazer(m1, no.space = TRUE, header = FALSE, table.placement = "H",
 
 Since a player's ability is correlated with the length of matches that player plays, it is important to control for it so that we can truly extract the effect of the length of the previous match on match outcomes. We used both rank points and seeded status of the players as controls.
 
-### How might the effect not be valid?
+
+### Best of quantity
+
+We find that the effect of previous match length differ significantly by best of quantity. In particular, the effect is negative for best of 5 set matches and positive for best 3 set matches. This suggests that for long matches the effect of the length of the previous matches is detrimental to the current match and for short matches it actually helps. We can test this hypothesis by looking at whether or not the effect of previous match length decrease as the number of sets in the current match increases. We see that the number of sets in the current match increases the benefit from a large previous match length difference for best of 3 matches and decreases the benefit for best of 5 matches.
+
+```{r results = "asis", cache = FALSE}
+source("~/Documents/masters_paper/Figures/Make/tennisDiscussion.R")
+stargazer(m5, no.space = TRUE, header = FALSE, table.placement = "H", 
+          type = "latex", title = "Effect of number of sets in the current match on importance of previous match difference")
+```
+
+This suggest that our hypothesis is incorrect and that there is something fundamentally different between Grand Slam best of 5 tournaments and other tournaments and warrants further investigation.
+
+### Surface 
+
+When we break down the effect of previous match length difference by surface and best of quantity the directionality of the efffect broken down by best of quantity mostly remains. However, we notice that for most surfaces the effect for best of 3 matches is close to zero or less than zero for all except carpet where it is significantly positive. Perhaps playing on carpet has less of a physical impact on players. We can suppose that playing a tournament game impacts players in both a benefit -the practice/experience gained- and detriment -the physical impact. It may be that on carpet the physical impact is minimal and players benefit from the experience. The effects for other best of 3 surfaces are not significant. 
+
+The effects for best of 5 matches are negative across the board. The magnitude of the effect does differ a little bit. 
 
 ## Comparison of sports
 

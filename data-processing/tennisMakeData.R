@@ -29,15 +29,18 @@ df$loser_id = as.factor(df$loser_id)
 
 df$retired = grepl("RET", df$score)
 df$tie_break = 1 + 2*as.numeric(str_extract(str_extract(df$score, "\\([0-9]{1,2}\\)"), "[0-9]{1,2}"))
+
 df$score = gsub("\\([0-9]{1,2}\\)", "", df$score)
 df$score = gsub(" RET", "", df$score)
+df$score = gsub(" DEF", "", df$score)
+
 df$game = strsplit(df$score, " |-")
-df$set = as.numeric(str_count(df$score, "-")) + 1
+df$set = as.numeric(str_count(df$score, "-"))
 
 
 out = c()
 for(i in df$game){
-  out[length(out) + 1] = sum(as.numeric(i))
+  out[length(out) + 1] = sum(as.numeric(i), na.rm = TRUE)
 }
 
 df$game = out
