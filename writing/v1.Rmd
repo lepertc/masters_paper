@@ -1,10 +1,11 @@
 ---
-title: "Effect of rest on soccer and tennis match outcomes"
+title: "Effects of rest and tiredness on soccer and tennis match outcomes"
 author: "Chloé Lepert"
 date: "8/9/2018"
 output: 
   pdf_document:
     number_sections: true
+fontsize: 12pt 
 header-includes:
 - \usepackage{float}
 ---
@@ -17,7 +18,7 @@ library(stargazer)
 
 # Introduction
 
-Many factors influence athletic performance in competitions. Most models predicting results focus on the strength of the team and the location of the competition, but other factors that players and teams can control could have an impact. In this paper, we will look at how rest and tiredness impact the performance of soccer teams and tennis players. 
+Many factors influence athletic performance in competitions. Most models predicting results focus on the strength of the team and the location of the competition, but other factors that players and teams can control could have an impact. In this paper, we look at how rest and tiredness impact the performance of soccer teams and tennis players. 
 
 ## Question 
 
@@ -28,36 +29,39 @@ We aim to quantify the effect of rest on Football match outcomes. We ask two que
     \item How the game load of a team in the past month, two months, and three months impact the performance of a team?
 \end{enumerate}
 
-For tennis, we look at the effect of the previous match attributes on match outcomes. We ask the question:
+For tennis, we look at the effect of the previous match attributes on match outcomes. We ask the following questions:
 
 \begin{enumerate}
   \item How does the length of the previous match impact performance?
+  \item How does this effect vary by game attributes?
 \end{enumerate}
 
 We will look at different models in which performance will be the probability of winning, drawing, and losing or the expected number of goals scored.
 
-## English Football
+## Football and Tennis
 
-Before explaining our motivation, we will first give an overview of the English and European soccer system so that the reader may better understand our motivation. 
+Before explaining our motivation, we will first give an overview of two sports so that the reader may better understand our motivation. 
+
+### English Football
 
 English soccer is comprised of multiple competitions. 
 
 \begin{itemize}
-    \item The top 20 teams in England play in the \textbf{Premier League}. They will play each other time once at home and once away resulting in 380 games played each season. Each match earns teams points; a win will get a team 3 points, a draw one point, and loss 0 points. The team with the most points win. The bottom two teams will be relegated to the EFL Championship. The top two teams from EFL Championship will advance to the Premier League. The third to last team in the Premier League and the third team in the EFL Championship will playoff to play in the Premier League. \cite{PremierLeague}
-    \item The \textbf{FA cup} is a knockout tournament open to teams in 10 levels of English football, this a knockout tournament. Teams enter the tournament at different times depending on the level they play in. Teams that play in the Premier league will enter the 3rd round in January with the hope of making it to the final played in May. \cite{FACup}
-    \item The \textbf{EFL cup} is a tournament similar to the FA cup but open only to levels 1 through 4. Premier League teams will enter in August. Matches continue until the final in February. Teams playing in European competitions do not play in this cup \cite{EFLCup}
+    \item The top 20 teams in England play in the \textbf{Premier League}. They play each other twice per season: once at home and once away resulting in 380 games played. Each match earns teams points; a win gets a team 3 points, a draw 1 point, and loss 0 point. The team with the most points win. The bottom two teams are relegated to the EFL Championship. The top two teams from EFL Championship advance to the Premier League. The third to last team in the Premier League and the third team in the EFL Championship playoff to play in the Premier League. \cite{PremierLeague}
+    \item The \textbf{FA cup} is a knockout tournament open to teams in 10 levels of English football. Teams enter the tournament at different times depending on the level they play in. Teams that play in the Premier league enter the 3rd round in January with the hope of making it to the final played in May. \cite{FACup}
+    \item The \textbf{EFL cup} is a tournament similar to the FA cup but open only to levels 1 through 4. Premier League teams enter in August. Matches continue until the final in February. Teams playing in European competitions do not play in this cup \cite{EFLCup}
 \end{itemize}
 
-There are two European competitions which are played with teams from different European leagues:
+There are two European competitions played with teams from different European leagues:
 
 \begin{itemize}
-    \item The top teams play in the \textbf{Champions League}. It starts with a group stage of 32 teams in which mini round robins are run in each group to determine which 16 teams go on to the tournament. Teams not advancing to the tournament are transferred to the Europa league. In the tournament stage teams meet twice: once home and once away. Since only one team can move forward to the next round, the return leg can go overtime to decide who win. The final is played in one match in a location determined ahead of time. \cite{Champions} In England the top three premier league teams automatically qualify for the Champions League. The fourth-place team qualifies for a playoff round. \cite{PL}
-    \item The \textbf{Europa league} is similar to the Champions league in format but played with the top teams not qualifying for the champions league. Depending on how a team qualifies it will enter the competition at different rounds. \cite{EuropaLeague} The 5th place Premier league team qualifies for the group stage, with the winners of the FA cup and EFL cup qualifying for earlier rounds. \cite{PL}
+    \item The top teams play in the \textbf{Champions League}. It starts with a group stage of 32 teams in which mini round robins are run in each group to determine which 16 teams go on to the tournament. Teams not advancing to the tournament are transferred to the Europa league. In the tournament stage, teams meet twice: once home and once away. Since only one team can move forward to the next round, the return leg can go overtime to decide who win. The final is played in one match in a location determined ahead of time. \cite{Champions} In England the top three premier league teams automatically qualify for the Champions League. The fourth-place team qualifies for a playoff round. \cite{PL}
+    \item The \textbf{Europa league} is similar to the Champions league in format but played with the top teams not qualifying for the champions league. Depending on how a team qualifies it enters the competition at different rounds. \cite{EuropaLeague} The 5th place Premier league team qualifies for the group stage, with the winners of the FA cup and EFL cup qualifying for earlier rounds. \cite{PL}
 \end{itemize}
 
-Depending on the year, the schedule will be inter-spaced with 2-week \textbf{international breaks}, in which players are called to represent their national team in international friendlies or qualifying matches for continent or world cups. 
+Depending on the year, the schedule is inter-spaced with 2-week \textbf{international breaks}, in which players are called to represent their national team in international friendlies or qualifying matches for continent or world cups. 
 
-The wide variety of competition that a team could play in means that teams can have different schedule load as shown in the following figure.
+The wide variety of competition that a team can play in means that teams have different schedule loads as shown in the following figure.
 
 ```{r}
 source("~/Documents/masters_paper/Figures/Make/gameLoad.R")
@@ -65,22 +69,22 @@ p
 ```
 
 
-## Men's professional tennis
+### Men's professional tennis
 
-Throughout the season players will play in a variety of tournaments. Performance in tournaments determines the number of points earned towards the players' world rankings. Tournaments have difference importances influencing how many points they grant players. 
+Throughout the season, players play in a variety of tournaments. Performance in tournaments determines the number of points earned towards the players' world rankings. Tournaments have different importances influencing how many points they grant players. 
 
-A player's ranking determines the players seeding in individual tournaments. Officials design seedings to have top players face each other as late in the tournament as possible.
+A player's ranking determines a player's seeding in individual tournaments. Officials design seedings to have top players face each other as late in the tournament as possible.
 
-Professional tennis is played in matches of 3 or 5 sets. The four main tournaments: Australian Open, Rolland Garros, Wimbledon, and US open are played in 5 sets, while the rest of tournaments are played in 3 sets. The first player to win 2 or 3 sets wins. 
+Professional tennis is played in matches of 3 or 5 sets. The four Grand Slam tournaments: Australian Open, Rolland Garros, Wimbledon, and US open are played in 5 sets, while the rest of tournaments are played in 3 sets. The first player to win 2 or 3 sets wins the match and moves on to the next round.
 
-The winning mechanism allows for games of different time length the distribution of which is shown below. 
+The winning mechanism allows for games of different time length; the distribution of which is shown below. 
 
 ```{r, cache = FALSE}
 source("~/Documents/masters_paper/Figures/Make/tennisData.R")
 p1
 ```
 
-A set is won by winning at least six games and having a two-game lead resulting in sets of different intensities; A set could be won 6-1, of 10-8. The distribution of the number of games is shown below along.
+A set is won by winning at least six games and having a two-game lead resulting in sets of different intensities; a set could be won 6-1, of 10-8. The distribution of the number of games is shown below along.
 
 ```{r}
 p2
@@ -92,13 +96,16 @@ Football game scheduling varies from league to league. In particular, some leagu
 
 Further Champions and Europa league games are played Tuesday through Thursday, while club games are played Friday through Mondays, leading to a variety of rest days going into Champions and Europa league games. (NEED CITATION) Some leagues are more willing to accommodate teams playing in European competitions than others by letting them schedule their games earlier in the weekend.
 
+In tennis, seedings are designed so that players' pathes to the finals are as fair as possible. The tournament is set up at the beginning of the tournament such that assuming the highest ranked player always wins, in each round, the highest ranked player always plays the lowest ranked player. Sometimes a low ranked player will upset high ranked player which can cause an easier path for future players. 
+
+Here we look at whether the length of the previous match on a player's path impacts performance on the current game. While some of the influence of a match's length are outside a player's control, for example how hard their oponent is to beat, other attributes might not be.
 An effect of previous matches on present matches could affect how matches are played. If player's know that long matches hurt them in the long run, they might work harder to win quickly. Of course, we also need to measure the LR effect of working harder before making such a suggestion.
 
 ## Approach
 
-While we would ideally want to look at how rest affects performance in European competitions doing so is difficult because the teams that play each other in European competitions do not do so enough for us to calculate and control for team ability on an even scale. We will instead model the outcome of Premier League matches, which are set up such that we can easily control for team ability. We will evaluate how matches in competitions other than the premier league influence premier league matches.
+While we would ideally want to look at how rest affects performance in European competitions doing so is difficult because the teams that play each other in European competitions do not do so frequently enough for us to calculate and control for team ability on an even scale. We will instead model the outcome of Premier League matches, which are set up such that we can easily control for team ability. We will evaluate how matches in competitions other than the premier league influence premier league matches.
 
-This approach assumes that European competition games are similar Premier League games. This is mostly true except for the fact that European competition games can result in overtime and are higher stakes; a loss results in elimination. We assume that if we see rest impact outcomes in premier league games, rest is likely to have an impact in European games. 
+This approach assumes that European competition games are similar to Premier League games. This is mostly true except for the fact that European competition games can result in overtime and are higher stakes; a loss results in elimination. We assume that if we see rest impact outcomes in premier league games, rest is likely to have an impact in European games. 
 
 For tennis, we measure the effects of previous match attributes on the next match. We look at how these effects differ by surface and whether the match is best of 3 or best of 5.
 
@@ -112,12 +119,23 @@ Over the past decades, Carlos Lago Penas conducted a series of studies looking a
 
 In 2010, Dupont et al. found a higher injury rate for football players who played two matches a week compared to players playing one match a week.
 
-### Modeling match outcomes
+### Modeling football match outcomes
 
-In 1982, M. J. Maher introduced two independent Poisson distributions as a way to model soccer scores. He proposed using a team's attacking strength and its opponent's defensive weakness as predictors of the number of goals scored. Maher also found that using a Bivariate Poisson distribution with a correlation of 0.2 improved his model's fit. \cite{Maher}
+The sports statistic community quickly converged on the best way to model soccer scores. In 1982, M. J. Maher introduced two independent Poisson distributions as a way to model soccer scores. He proposed using a team's attacking strength and its opponent's defensive weakness as predictors of the number of goals scored. Maher also found that using a Bivariate Poisson distribution with a correlation of 0.2 improved his model's fit. \cite{Maher}
 
-In 2003, Karlis and Ntzoufras proposed a diagonal inflated bivariate Poisson model in which the probabilities of draws are increased. \cite{karlis} They also created an R package to fit bivariate Poisson GLMs which we will utilize. \cite{bivpois}
+Expanding on Maher's work, Karlis and Ntzoufras proposed a diagonal inflated bivariate Poisson model in which the probabilities of draws are increased in 2003. \cite{karlis} They also created an R package to fit bivariate Poisson GLMs which we will utilize. \cite{bivpois}
 
+We will also look at the proportional odds ordered logistic model which predicts the probability of a win, tie, or loss.
+
+### Tennis match length
+
+In 2007, Pereir, Nakamura, and de Jesus tracked physical performance -distance covered in a set and stroke proficiency in the first two sets of a match and found no decrease in physical performance. 
+
+In 2015, Goosens, Kemperas, and Kosing looked at how the difference in number of sets in the previous match impacts outcome in the current match in Grand Slams. They found a significant decrease in probability of winning for a difference in sets number of 1 for women and 2 for men.
+
+### Predicting tennis matches
+
+Most models aimed at tennis betting use the hierarchical structure of tennis matches set-game-point to build stochastic models. In 2015, Sipky proposed using historical data about the players and a neural network and achieved a 75% performance improvement over existing models. In 2003, Klassen and Magnus proposed a logistic model to forcast tennis matches. We chose this model in our analysis as it easily lends itself to inference.
 
 ## Data
 
@@ -125,7 +143,7 @@ In 2003, Karlis and Ntzoufras proposed a diagonal inflated bivariate Poisson mod
 
 #### Data set
 
-The data was obtained from Kaggle and contains outcomes and attributes of ATP Mens tennis matches between 2000 and 2017. We split each game into two rows one for each player.
+The data was obtained from Kaggle and contains outcomes and attributes of ATP (Association of Tennis Professionals) Mens tennis matches between 2000 and 2017. We split each game into two observations, one for each player.
 
 #### Response variable
 
@@ -133,7 +151,7 @@ The response variable is whether or not a player won a game. As players have to 
 
 #### Predictors
 
-The predictor is the length of the previous match played by the player in minutes. Three-quarters of the games are less than 2 hours long, but games can go on for many more hours. About five percent of games go on for more than 3 hours.
+The predictor is the length of the previous match played by the player in hours Three-quarters of the games are less than 2 hours long, but games can go on for many more hours. About five percent of games go on for more than 3 hours.
 
 ```{r, cache = FALSE}
 source("~/Documents/masters_paper/Figures/Make/tennisData.R")
@@ -145,11 +163,11 @@ We control for player ability by looking at the player's rank at the beginning o
 
 We also control for whether or not a player is seeded. Seeded players tend to be the top 32 players in the tournament and do not have to play as many early rounds.
 
-We also look at whether or not the effects differ by surface, the number of sets needed to win, and the round of the match.
+We also look at whether or not the effects differ by surface or by the number of sets needed to win.
 
 ##### Surface
 
-Tennis is either played on Carpet, Clay, Grass, or Hard. Players will have preferences for different surfaces, and some surfaces are often cited as causes for injuries. The distribution of surfaces is shown below.
+Tennis is either played on Carpet, Clay, Grass, or Hard. Players will have preferences for different surfaces, and some surfaces are often cited as causes for injuries (cite). The distribution of surfaces is shown below.
 
 ```{r results = "asis"}
 stargazer(s, summary = FALSE, no.space = TRUE, header = FALSE, 
@@ -164,16 +182,17 @@ Most men's tennis matches are won by a player winning two sets. The four major t
 
 #### Games looked at
 
-We look at all matches for which both players played their previous match in the same tournament. This allows us to make sure that the previous match happened within a reasonable number of days and that surface and best of quantity are the same between player histories.
+We look at all matches for which both players played their previous match in the same tournament. This allows us to make sure that the previous match happened within a reasonable number of days and that surface and best of quantity are the same between player histories. We remove any match including and unranked player
 
 ### Soccer
+
 #### Data set
 
 The R package "engsoccerdata" provides us with scores from matches in England as well as European competition matches. \cite{Curley} We limit ourselves to matches occurring in seasons 1995 through 2015. The design of English Football stays consistent throughout this time range, and the data set is complete for these years.
 
 #### Response variable
 
-We use two different response variables: 1. The number of home and away goals and 2. Whether the team won, tied, or lost. The distribution of home and away goals is shown below.
+We use two different response variables: 1. the number of home and away goals and 2. whether the team won, tied, or lost. The distribution of home and away goals is shown below.
 
 ```{r include=FALSE}
 source("~/Documents/masters_paper/Figures/Make/goalDist.R")
@@ -205,7 +224,7 @@ Visitor win & $1,187$ & $0.276$ \\
 
 #### Predictors
 
-Using this dataset, we calculate the number of days since the previous game. Before performing out analysis on the effect of rest time, we remove games in which either of the team's previous game was over eight days ago. If the team's last non-international game was more than eight days prior, it is possible that an international break previous happened which we have no way of controlling for. 
+Using this dataset, we calculate the number of days since the previous game. Before performing our analysis on the effect of rest time, we remove games in which either of the team's previous game was over eight days ago. If the team's last non-international game was more than eight days prior, it is possible that an international break occured which we have no way of controlling for. 
 
 The distribution of rest time for the home and away team is shown below. 
 
@@ -248,14 +267,16 @@ Away & 1-5 days & $1,256$ & $512$ \\
 
 #### Control variables
 
-Using Premier games, we calculate each team's attacking and defensive weakness. \cite{Cronin} The attacking strength is the ratio of the average number of goals scored by a team in a season to the average number of goals scored in the league that season. The defensive weakness is the ratio of the average number of goal conceded by a team in a season to the average number of goals conceded in the league that season. For each team, the attacking strength and defensive weakness are computed for home and away games. The better a team, the higher its attacking strength and the lower its defensive weakness strength will be. We will use the previous years attacking and defensive weakness to control for a team's ability. We exclude recently promoted teams from our analysis as we cannot use their previous season to calculate such strengths. The distribution of attacking and defensive strengths is shown below.
+Using Premier Leauge games, we calculate each team's attacking and defensive weakness. \cite{Cronin} 
+The attacking strength is the ratio of the average number of goals scored by a team in a season to the average number of goals scored in the league that season. The defensive weakness is the ratio of the average number of goal conceded by a team in a season to the average number of goals conceded in the league that season. 
+It is generally believed that the performance of a team differs depending on whether the team is home or visiting; therefore we calculate Attacking Strength and Defensive Weakness for home and away games. The better a team, the higher its attacking strength and the lower its defensive weakness strength will be. We will use the previous years attacking and defensive weakness to control for a team's ability. We exclude recently promoted teams from our analysis as we cannot use their previous season to calculate such strengths, since they played against a different set of teams. The distribution of attacking and defensive strengths is shown below.
 
 ```{r, cache=FALSE}
 source("~/Documents/masters_paper/Figures/Make/strengthDist.R")
 p
 ```
 
-We also control for the number of games a team plays each season. Better teams will last longer in playoff competitions such as the FA Cup, Europa League, and Champions League, that happen concurrently with premier league games. These teams will play more games per season and thus on average have lower rest times. In particular, the design of the premier league in which each pair of teams plays each other once at each team's home stadium allows us to calculate attacking strength and defensive weakness easily.
+We also control for the number of games a team plays each season. Better teams will last longer in playoff competitions such as the FA Cup, Europa League, and Champions League, that happen concurrently with premier league games. These teams will play more games per season and thus on average have lower rest times.
 
 #### Matches looked at
 

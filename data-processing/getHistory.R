@@ -31,6 +31,14 @@ games = melt(games, id.vars = c("Date", "type", "year", "Season"),
              variable.name = "location", value.name =  "team")
 team_season_load = games[, .(load = .N), by = list(team, Season)]
 
+games_pl = england[, c("Season", "home", "division")]
+games_pl = games_pl[games_pl$division == 1, ]
+games_pl = unique(games_pl)
+names(games_pl)[2] = "team"
+games_pl$division = NULL
+
+team_season_load = merge(team_season_load, games_pl, by = c("Season", "team"))
+
 # Get previous game location and date
 games[, date_order := rank(Date), by = "team"]
 games = games[, year := NULL]
