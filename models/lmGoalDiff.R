@@ -18,5 +18,3 @@ p <- ggplot(df, aes(x = goal_diff)) + geom_histogram(binwidth = 0.5, color = "bl
 ##### Model #####
 lm_diff = lm(goal_diff ~ h_rest + v_rest + h_att_str + h_def_weak + v_att_str + 
                v_def_weak + h_load + v_load, data = df)
-
-# stargazer(lm_diff, no.space = TRUE, title = "Linear model for the difference in goals scored")

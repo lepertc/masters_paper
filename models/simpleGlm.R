@@ -29,8 +29,5 @@ m_vis_bin = glm(vgoal ~ Team_rest_bin + Opp_rest_bin + Team_att_str + Opp_def_we
 
 summary(m_vis_bin)
 
-##### Printing model #####
-stargazer(m_home_days, m_home_bin, m_vis_days, m_vis_bin, no.space = TRUE,
-          title = "Generalized Linear Models with Poisson link")
 
 

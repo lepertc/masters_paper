@@ -33,5 +33,7 @@ s = as.data.frame(table(df_p$surface))
 s$share = s$Freq/sum(s$Freq)
 rownames(s) = s$Var1
 s$Var1 = NULL
+
+names(s) = c("Frequency", "Share")
   
   

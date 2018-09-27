@@ -5,13 +5,12 @@ date: "8/9/2018"
 output: 
   pdf_document:
     number_sections: true
-fontsize: 12pt 
 header-includes:
 - \usepackage{float}
 ---
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE, warning = FALSE, message = FALSE)
 library(ggplot2); theme_set(theme_bw())
 library(stargazer)
 ```
@@ -366,132 +365,62 @@ The strongest effects come from the attacking strength of the home team and defe
 
 We also see an effect from the game load of a team. Game load also measure the quality of a team. Better teams will qualify for more games and thus have a higher game load. We expect to see an increase in a team's game load increase its predicted number of goals and an increase in its opponent's game load decrease a team's predicted number of goal; which is what we see.
 
-\begin{table}[H] \centering 
-  \caption{Generalized Linear Models with Poisson link} 
-  \label{} 
-\begin{tabular}{@{\extracolsep{5pt}}lcccc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- & \multicolumn{4}{c}{\textit{Dependent variable:}} \\ 
-\cline{2-5} 
-\\[-1.8ex] & \multicolumn{2}{c}{hgoal} & \multicolumn{2}{c}{vgoal} \\ 
-\\[-1.8ex] & (1) & (2) & (3) & (4)\\ 
-\hline \\[-1.8ex] 
- Team\_rest & $-$0.004 &  & $-$0.007 &  \\ 
-  & (0.009) &  & (0.011) &  \\ 
-  Opp\_rest & $-$0.001 &  & 0.005 &  \\ 
-  & (0.009) &  & (0.011) &  \\ 
-  Team\_rest\_bin &  & 0.047 &  & $-$0.044 \\ 
-  &  & (0.031) &  & (0.036) \\ 
-  Opp\_rest\_bin &  & $-$0.052$^{*}$ &  & 0.043 \\ 
-  &  & (0.031) &  & (0.037) \\ 
-  Team\_att\_str & 0.371$^{***}$ & 0.377$^{***}$ & 0.427$^{***}$ & 0.425$^{***}$ \\ 
-  & (0.050) & (0.050) & (0.053) & (0.053) \\ 
-  Opp\_def\_weak & 0.274$^{***}$ & 0.280$^{***}$ & 0.238$^{***}$ & 0.239$^{***}$ \\ 
-  & (0.061) & (0.061) & (0.061) & (0.061) \\ 
-  Team\_load & 0.015$^{***}$ & 0.017$^{***}$ & 0.011$^{***}$ & 0.010$^{***}$ \\ 
-  & (0.003) & (0.003) & (0.003) & (0.003) \\ 
-  Opp\_load & $-$0.020$^{***}$ & $-$0.021$^{***}$ & $-$0.024$^{***}$ & $-$0.023$^{***}$ \\ 
-  & (0.003) & (0.003) & (0.004) & (0.004) \\ 
-  Constant & $-$0.036 & $-$0.077 & $-$0.025 & $-$0.041 \\ 
-  & (0.205) & (0.199) & (0.231) & (0.223) \\ 
- \hline \\[-1.8ex] 
-Observations & 4,296 & 4,296 & 4,296 & 4,296 \\ 
-Log Likelihood & $-$6,597.132 & $-$6,595.641 & $-$5,804.871 & $-$5,804.193 \\ 
-Akaike Inf. Crit. & 13,208.260 & 13,205.280 & 11,623.740 & 11,622.390 \\ 
-\hline 
-\hline \\[-1.8ex] 
-\textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
-\end{tabular} 
-\end{table}
+```{r results = "asis"}
+source("~/Documents/masters_paper/models/simpleGlm.R")
+stargazer(m_home_days, m_home_bin, m_vis_days, m_vis_bin, single.row = TRUE,
+          title = "Generalized Linear Models with Poisson link", header = FALSE,
+          dep.var.labels = c("Home goals", "Visitor goals"),
+          covariate.labels = c("Team rest (days)", "Opponent rest (days)",
+                               "Team rest > 5 days", "Opponent rest > 5 days",
+                               "Team attacking strength", 
+                               "Opp. defensive weakness",
+                               "Team load", "Opponent load",
+                               "Constant"),
+          table.placement = "H")
+```
 
 
 ## Linear model for goal difference
 
 Table \ref{table:lm_simple} summarizes the model for the square root goal difference. We find that the rest of the home and away team have no significant impact on the goal difference. Predictors highlighting the strength of the teams involved are most important.
 
-\begin{table}[H] \centering 
-  \caption{Linear model for the difference in goals scored} 
-  \label{table:lm_simple} 
-\begin{tabular}{@{\extracolsep{5pt}}lc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
-\cline{2-2} 
-\\[-1.8ex] & goal\_diff \\ 
-\hline \\[-1.8ex] 
- h\_rest & $-$0.005 \\ 
-  & (0.010) \\ 
-  v\_rest & $-$0.003 \\ 
-  & (0.010) \\ 
-  h\_att\_str & 0.399$^{***}$ \\ 
-  & (0.057) \\ 
-  h\_def\_weak & $-$0.277$^{***}$ \\ 
-  & (0.057) \\ 
-  v\_att\_str & $-$0.380$^{***}$ \\ 
-  & (0.050) \\ 
-  v\_def\_weak & 0.364$^{***}$ \\ 
-  & (0.066) \\ 
-  h\_load & 0.019$^{***}$ \\ 
-  & (0.003) \\ 
-  v\_load & $-$0.015$^{***}$ \\ 
-  & (0.003) \\ 
-  Constant & $-$0.037 \\ 
-  & (0.246) \\ 
- \hline \\[-1.8ex] 
-Observations & 4,296 \\ 
-R$^{2}$ & 0.138 \\ 
-Adjusted R$^{2}$ & 0.136 \\ 
-Residual Std. Error & 0.878 (df = 4287) \\ 
-F Statistic & 85.434$^{***}$ (df = 8; 4287) \\ 
-\hline 
-\hline \\[-1.8ex] 
-\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
-\end{tabular} 
-\end{table}
+```{r results = "asis"}
+source("~/Documents/masters_paper/models/lmGoalDiff.R")
+stargazer(lm_diff, single.row = TRUE, header = FALSE,
+          title = "Linear model for the difference in goals scored", 
+          dep.var.labels = "Goal difference",
+          covariate.labels = c("Team rest (days)", "Opponent rest (days)",
+                               "Team attacking strength", 
+                               "Team defensive weakness",
+                               "Opp. attacking strength",
+                               "Opp. defensive weakness",
+                               "Team load", "Opponent load",
+                               "Constant"),
+          table.placement = "H")
+```
+
 
 ## Proportional odds cummulative logit model
 
 The odds of moving from a visitor win to a tie or a tie to a home win increase when the home team's attacking strength, home team's game load, or visitor's team defensive weakness increases. The opposite happens when the teams are reversed. The directionality of these findings agrees with the other models. The proportional odds cumulative logit model does not find any effect of rest, whether measured in days or as a binary variable. 
-\begin{table}[H] \centering 
-  \caption{Ordered logistic model} 
-  \label{} 
-\begin{tabular}{@{\extracolsep{5pt}}lcc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
-\cline{2-3} 
-\\[-1.8ex] & \multicolumn{2}{c}{outcome} \\ 
-\\[-1.8ex] & (1) & (2)\\ 
-\hline \\[-1.8ex] 
- Team\_rest & $-$0.016 &  \\ 
-  & (0.022) &  \\ 
-  Opp\_rest & 0.006 &  \\ 
-  & (0.022) &  \\ 
-  Team\_rest\_bin &  & $-$0.002 \\ 
-  &  & (0.074) \\ 
-  Opp\_rest\_bin &  & $-$0.039 \\ 
-  &  & (0.074) \\ 
-  Team\_att\_str & 0.864$^{***}$ & 0.870$^{***}$ \\ 
-  & (0.130) & (0.130) \\ 
-  Opp\_def\_weak & 0.700$^{***}$ & 0.707$^{***}$ \\ 
-  & (0.145) & (0.145) \\ 
-  Opp\_att\_str & $-$0.717$^{***}$ & $-$0.722$^{***}$ \\ 
-  & (0.111) & (0.111) \\ 
-  Team\_def\_weak & $-$0.490$^{***}$ & $-$0.490$^{***}$ \\ 
-  & (0.125) & (0.125) \\ 
-  Team\_load & 0.042$^{***}$ & 0.043$^{***}$ \\ 
-  & (0.008) & (0.008) \\ 
-  Opp\_load & $-$0.034$^{***}$ & $-$0.035$^{***}$ \\ 
-  & (0.008) & (0.008) \\ 
- \hline \\[-1.8ex] 
-Observations & 4,296 & 4,296 \\ 
-\hline 
-\hline \\[-1.8ex] 
-\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
-\end{tabular} 
-\end{table} 
 
+```{r results = "asis"}
+source("~/Documents/masters_paper/models/orderedLogistic.R")
+stargazer(m_days, m_bin, single.row = TRUE,
+          dep.var.labels = "Probability of winning",
+          title = "Ordered logistic model", header = FALSE,
+          covariate.labels = c("Team rest (days)", "Opponent rest (days)",
+                               "Team rest > 5 days", "Opponent rest > 5 days",
+                               "Team attacking strength", 
+                               "Opp. defensive weakness",
+                               "Opp. attacking strength",
+                               "Team defensive weakness",
+                               "Team load", "Opponent load",
+                               "Constant"),
+          table.placement = "H")
+```
+
+NEED TO INCLUDE THRESHOLD PROBS
 
 ## Logistic GLM
 
@@ -499,10 +428,18 @@ In the simplest model looking at how the difference in minutes of the previous m
 
 When we control for the difference in ranking points between the two players the effect disappears. Further, controlling for whether or no a player or his opponent was seeded further helps predict tennis match outcomes.
 
-```{r results = "asis", cache = FALSE}
+```{r results = "asis"}
 source("~/Documents/masters_paper/models/tennisLog.R")
-stargazer(m0, m02, m1, m2, no.space = TRUE, header = FALSE, table.placement = "H", 
-          type = "latex", title = "Logistic model for the probability of winning a tennis match")
+stargazer(m0, m02, m1, m2, single.row = TRUE, header = FALSE, 
+          table.placement = "H", dep.var.labels = "Win probability",
+          type = "latex", 
+          covariate.labels = c("Prev. match length diff. (hours)",
+                               "Squared match length diff.",
+                               "Difference in ranking points", 
+                               "Player is seeded",
+                               "Opponent is seeded",
+                               "Constant"),
+          title = "Logistic model for the probability of winning a tennis match")
 ```
 
 When we look at the effect by best of quantity, we find a positive effect on winning probability for best of three matches and a negative effect on winning probability for best of five matches. 
@@ -513,10 +450,36 @@ We then split the surface effects by best of quantity and see that clay only inc
 
 ```{r results = "asis", cache = FALSE}
 source("~/Documents/masters_paper/models/tennisLog.R")
-stargazer(m4, m3, m5, no.space = TRUE, header = FALSE, table.placement = "H", 
+stargazer(m4, m3, single.row = TRUE, header = FALSE, table.placement = "H",
+          dep.var.labels = "Win probability",
+          order = c("delta_rank_pts", "player_seed", "opp_seed"),
+          covariate.labels = c("Diff. in ranking points",
+                               "Player is seeded",
+                               "Opponent is seeded",
+                               "Surface: carpet - PMLD (hours)",
+                               "Surface: clay - PMLD (hours)",
+                               "Surface: grass - PMLD (hours)",
+                               "Surface: hard - PMLD (hours)",
+                               "Best of 3", 
+                               "Best of 5"),
           type = "latex", title = "Effect of previous match length on winning probability by match type")
 ```
 
+```{r results = "asis", cache = FALSE}
+source("~/Documents/masters_paper/models/tennisLog.R")
+stargazer(m53, m55, single.row = TRUE, header = FALSE, table.placement = "H",
+          dep.var.labels = "Win probability",
+          order = c("delta_rank_pts", "player_seed", "opp_seed"),
+          covariate.labels = c("Diff. in ranking points",
+                               "Player is seeded",
+                               "Opponent is seeded",
+                               "Surface: carpet - PMLD (hours)",
+                               "Surface: clay - PMLD (hours)",
+                               "Surface: grass - PMLD (hours)",
+                               "Surface: hard - PMLD (hours)"),
+          column.labels = c("Best of 3", "Best of 5"),
+          type = "latex", title = "Effect of previous match length on winning probability by match type")
+```
 # Discussion
 
 ## Soccer
@@ -546,7 +509,10 @@ In the Poisson model below in which we assume that the length of a tennis match 
 
 ```{r results = "asis", cache = FALSE}
 source("~/Documents/masters_paper/Figures/Make/tennisDiscussion.R")
-stargazer(m1, no.space = TRUE, header = FALSE, table.placement = "H", 
+stargazer(m1, single.row = TRUE, header = FALSE, 
+          table.placement = "H", 
+          covariate.labels = c("Unseeded player - Opponent rank points",
+                               "Seeded player - Opponent rank points"),
           type = "latex", title = "Effect of opponent's ranking points on match length by player seed")
 ```
 
@@ -559,7 +525,15 @@ We find that the effect of previous match length differ significantly by best of
 
 ```{r results = "asis", cache = FALSE}
 source("~/Documents/masters_paper/Figures/Make/tennisDiscussion.R")
-stargazer(m5, no.space = TRUE, header = FALSE, table.placement = "H", 
+stargazer(m43, m45, single.row = TRUE, header = FALSE, table.placement = "H", 
+          covariate.labels = c("Diff. in ranking points",
+                               "Player is seeded",
+                               "Opponent is seeded",
+                               "2 Set - PMLD (hours)",
+                               "3 Set - PMLD (hours)",
+                               "4 Set - PMLD (hours)",
+                               "5 Set - PMLD (hours)"),
+          column.labels = c("Best of 3", "Best of 5"),
           type = "latex", title = "Effect of number of sets in the current match on importance of previous match difference")
 ```
 

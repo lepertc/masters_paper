@@ -3,13 +3,13 @@ library(stargazer)
 
 ##### Load data #####
 df = readRDS("/Users/chloelepert/Documents/masters_paper/data-processing/Data/tennisHistoryProcess.rds")
-
+df$delta_hours_2 = df$delta_hours^2
 ##### Build models #####
 
 # Table 1
 m0 <- glm(won ~ delta_hours, data = df, family = binomial)
 
-m02 <- glm(won ~ poly(delta_hours, 2), data = df, family = binomial)
+m02 <- glm(won ~ delta_hours + delta_hours_2, data = df, family = binomial)
 
 m1 <- glm(won ~ delta_hours + delta_rank_pts, data = df, 
           family = binomial)
@@ -24,6 +24,10 @@ m3 <- glm(won ~ delta_hours:surface + player_seed + opp_seed + delta_rank_pts, d
 m4 <- glm(won ~ delta_hours:as.factor(best_of) + delta_rank_pts +  player_seed + opp_seed, data = df, 
            family = binomial)
 
-m5 <- glm(won ~ delta_hours:as.factor(best_of):surface + delta_rank_pts + player_seed + opp_seed, data = df, 
-           family = binomial)
+m53 <- glm(won ~ delta_hours:surface + delta_rank_pts + player_seed + opp_seed, 
+           data = df[best_of == 3], family = binomial)
+
+m55 <- glm(won ~ delta_hours:surface + delta_rank_pts + player_seed + opp_seed, 
+           data = df[best_of == 5], family = binomial)
+
 

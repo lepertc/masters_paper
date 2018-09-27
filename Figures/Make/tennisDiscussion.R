@@ -22,6 +22,9 @@ df_seed$se = df_seed$min_sd/sqrt(df_seed$count)
 
 m1 = glm(minutes ~ player_seed:opp_rank_points, df, family = poisson)
 
-m5 <- glm(won ~ as.factor(best_of):delta_hours:as.factor(set) + delta_rank_pts +  player_seed + opp_seed, data = df, 
-          family = binomial)
+df = df[set > 1]
+m43 <- glm(won ~ delta_hours:as.factor(set) + delta_rank_pts +  player_seed + 
+             opp_seed, data = df[best_of == 3 & set < 4], family = binomial)
 
+m45 <- glm(won ~ delta_hours:as.factor(set) + delta_rank_pts +  player_seed + 
+             opp_seed, data = df[best_of == 5], family = binomial)
