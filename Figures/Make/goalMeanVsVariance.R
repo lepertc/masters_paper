@@ -20,5 +20,10 @@ df_mean_var_v$side = "Visitor"
 
 df_mean_var = rbind(df_mean_var_h, df_mean_var_v)
 
-p <- ggplot(df_mean_var, aes(x = mean, y = variance)) + geom_point() + facet_wrap(~ side, scale = "free") + 
-  labs(title = "Variance and Mean of the number of goals in a game split by home and away goal")
+p <- ggplot(df_mean_var, aes(x = mean, y = variance)) + geom_point(size = 0.5) + facet_wrap(~ side, scale = "free") + 
+  labs(title = "Variance and Mean of the number of goals in a game split by home and visitor goals",
+       x = "Mean", y = "Variance") + theme(plot.title = element_text(size = 10),
+                                           axis.text.x = element_text(size = 8),
+                                           axis.text.y = element_text(size = 8),
+                                           axis.title.x = element_text(size = 10),
+                                           axis.title.y = element_text(size = 10))

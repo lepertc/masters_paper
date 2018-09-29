@@ -62,7 +62,7 @@ Depending on the year, the schedule is inter-spaced with 2-week \textbf{internat
 
 The wide variety of competition that a team can play in means that teams have different schedule loads as shown in the following figure.
 
-```{r}
+```{r, fig.height = 3, fig.width = 5, fig.align='center'}
 source("~/Documents/masters_paper/Figures/Make/gameLoad.R")
 p
 ```
@@ -78,14 +78,14 @@ Professional tennis is played in matches of 3 or 5 sets. The four Grand Slam tou
 
 The winning mechanism allows for games of different time length; the distribution of which is shown below. 
 
-```{r, cache = FALSE}
+```{r, fig.height = 3, fig.width = 5, fig.align='center'}
 source("~/Documents/masters_paper/Figures/Make/tennisData.R")
 p1
 ```
 
 A set is won by winning at least six games and having a two-game lead resulting in sets of different intensities; a set could be won 6-1, of 10-8. The distribution of the number of games is shown below along.
 
-```{r}
+```{r, fig.height = 3, fig.width = 5, fig.align='center'}
 p2
 ```
 
@@ -197,7 +197,7 @@ We use two different response variables: 1. the number of home and away goals an
 source("~/Documents/masters_paper/Figures/Make/goalDist.R")
 ```
 
-```{r}
+```{r, fig.height = 4, fig.width = 5, fig.align='center'}
 plot(p)
 ```
 
@@ -270,7 +270,7 @@ Using Premier Leauge games, we calculate each team's attacking and defensive wea
 The attacking strength is the ratio of the average number of goals scored by a team in a season to the average number of goals scored in the league that season. The defensive weakness is the ratio of the average number of goal conceded by a team in a season to the average number of goals conceded in the league that season. 
 It is generally believed that the performance of a team differs depending on whether the team is home or visiting; therefore we calculate Attacking Strength and Defensive Weakness for home and away games. The better a team, the higher its attacking strength and the lower its defensive weakness strength will be. We will use the previous years attacking and defensive weakness to control for a team's ability. We exclude recently promoted teams from our analysis as we cannot use their previous season to calculate such strengths, since they played against a different set of teams. The distribution of attacking and defensive strengths is shown below.
 
-```{r, cache=FALSE}
+```{r, fig.height = 4, fig.width = 6, fig.align='center'}
 source("~/Documents/masters_paper/Figures/Make/strengthDist.R")
 p
 ```
@@ -307,7 +307,7 @@ The Poisson model is most commonly used to model soccer scores. It assumes that 
 
 One of the defining features of the Poisson model is the fact that the mean of a Poisson distribution equals its variance. As the figure below shows for most teams this equality holds. 
 
-```{r}
+```{r, fig.height = 3, fig.width = 6, fig.align='center'}
 source("~/Documents/masters_paper/Figures/Make/goalMeanVsVariance.R")
 p
 ```
@@ -317,7 +317,7 @@ p
 
 The square root of a Poisson distribution can be approximated by a normal distribution (cite). We can, therefore, approximate the difference in square root goals as the difference of two normal distributions, which is itself a normal distribution. This allows us to fit a normal model to the transformed goal difference. The figure below shows the distribution of square root goal difference and its approximation as a normal distribution.
 
-```{r, cache=FALSE}
+```{r, fig.height = 3, fig.width = 5, fig.align='center'}
 #http://tina.wiau.man.ac.uk/docs/memos/2001-010.pdf
 source("~/Documents/masters_paper/models/lmGoalDiff.R")
 p
@@ -373,7 +373,7 @@ In the proportional odds model we require the coefficients $\beta_v$ and $\beta_
 
 The underlying assumption is that there is an unobserved variable which determines match outcomes. Here this variable is the ability of a home team to win against a given opponent. The predictors X change our belief as to how this ability is distributed. 
 
-```{r}
+```{r, fig.height = 3, fig.width = 5, fig.align='center'}
 source("~/Documents/masters_paper/Figures/Make/orderedEx.R")
 p
 ```

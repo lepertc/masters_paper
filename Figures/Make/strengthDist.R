@@ -20,4 +20,7 @@ df_s = gather(df, "Attribute", "Value", -Team, -Season, - type)
 
 p <- ggplot(df_s, aes(x = Value)) + geom_density() + facet_wrap(type ~ Attribute) +
   labs(y = NULL, x = NULL,
-       title = "Distribution of attacking strength and defensive weakness for home and away teams")
+       title = "Distribution of attacking strength and defensive weakness for home and away teams") +
+  theme(plot.title = element_text(size = 10), axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8), axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10))

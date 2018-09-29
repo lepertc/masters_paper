@@ -7,15 +7,21 @@ df = readRDS("~/Documents/masters_paper/data-processing/Data/tennisHistoryProces
 ##### Previous match length ######
 df_p = df[df$won == 1, ]
 
-p1 <- ggplot(df_p, aes(x = minutes)) + geom_histogram(binwidth = 5) + 
-  xlim(c(0, 400)) + labs(title = "Distribution of tennis match length")
+p1 <- ggplot(df_p, aes(x = minutes)) + geom_histogram(binwidth = 5, color = "darkgrey", fill = "darkgrey") + 
+  xlim(c(0, 400)) + labs(title = "Distribution of tennis match length", y = NULL, x = "Length (minutes)") +
+  theme(plot.title = element_text(size = 10), axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8), axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10))
 
-p2 <- ggplot(df_p[df_p$set != 1 & df_p$set != 6,], 
+p2 <- ggplot(df_p[df_p$set != 1 & df_p$set != 6 & df_p$set != 0,], 
              aes(x = game, fill = as.factor(set))) + 
-  geom_histogram(binwidth = 1, alpha = 0.5, position="identity") + 
+  geom_histogram(binwidth = 1, alpha = 0.5, position = "identity") + 
   xlim(c(0, 75)) +
   labs(title = "Distribution of the number of games in tennis matches by number of set",
-       x = "Number of games", fill = NULL)
+       x = "Number of games", fill = NULL) + 
+  theme(plot.title = element_text(size = 10), axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8), axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10))
 
 p3 <- ggplot(df_p[df_p$set != 1 & df_p$set != 6,], aes(x = game/set, color = as.factor(set))) + 
   geom_density() + xlim(c(0, 20)) +
