@@ -287,9 +287,11 @@ As described in the previous subsections there are two points at which we remove
 
 # Methods
 
+There are many ways to model the outcomes of sporting events. We first look at ways to model actual scores such as the Poisson model, the linear model for goal difference, and the bivariate poisson model for soccer scores. We also look at ways to model the outcomes Win-Tie-Lose for soccer and Win-Lose for tennis with a proportional odds cumulative model and logistic model
+
 ## Poisson model
 
-The Poisson model is most commonly used to model soccer scores. It assumes that the number of goals scored by a team in a soccer game follows a Poisson distribution of some parameter. We will use a GLM with a Poisson link to predict the parameter. 
+The Poisson model is most commonly used to model soccer scores. It assumes that the number of goals scored by a team in a soccer game follows a Poisson distribution of some parameter. We will use a GLM with a Poisson link to predict the parameter. In the traditional Poisson model for the number of goals scored by a team, the team's attacking strength and its opponent's defensive weakness are the covariates used to model the parameter. Here we add measures of rest as predictors to see if they are predictives of goals scored.
 
 ### Model
 
@@ -321,20 +323,49 @@ source("~/Documents/masters_paper/models/lmGoalDiff.R")
 p
 ```
 
+We see that the difference is approximately normal with more ties than expected.
+
 Our model aims to find a linear combination of our predictors that best approximates the square root goal difference.
 
 $\sqrt{G_{h,i}} - \sqrt{G_{v,i}} = X_j \beta_j$
 
-In this model, we could use the difference in the number of rest days as a predictor instead of the number of rest days for the home team and number of rest days for the away team. Using the difference in rest as a predictor is equivalent to using the rest days for the home team and the away teams and forcing their coefficients in the model to be the opposite. We chose not to add this constraint and allow home and away rest to vary freely.
+In this model, we could use the difference in the number of rest days as a predictor instead of the number of rest days for the home team and number of rest days for the away team. Using the difference in rest as a predictor is equivalent to using the rest days for the home team and the away teams and forcing their coefficients in the model to be the opposite. 
+
+$\beta_1 X_{home-rest} + \beta_2 X_{visitor-rest}$ vs. $\beta_1(X_{home-rest} - X_{visitor-rest})$
+
+We chose not to add this constraint and allow home and away rest to vary freely.
+
+## Bivariate poisson model
+
+The bi-variate Poisson model assumes that the number of goals that home and away teams score is not only determined by factors affect each team, but also by factors affecting the game itself.
+
+\begin{itemize}
+    \item Assume that $G_j \thicksim Poisson(\lambda_j + \lambda_g)$. 
+    \item The parameter $\lambda_g$ is a linear combination of the predictors $X$: $\lambda_g = X_g \beta_j$  
+\end{itemize}
+
+The probability distributions for the number of goals by the home and away team is given by:
+
+\begin{equation}
+    P_{BP}(G_h = g_h, G_a = g_a|\lambda_h, \lambda_a,  \lambda_g) = 
+    e^{-(\lambda_h + \lambda_a + \lambda_g)} 
+    \frac{\lambda_h^{g_h}}{g_h!} 
+    \frac{\lambda_a^{g_a}}{g_a!} 
+    \sum_{i=0}^{min(g_h, g_a)} 
+    {g_h \choose i} 
+    {g_a \choose i} 
+    i! 
+    \bigg( \frac{\lambda_g}{ \lambda_g \lambda_a} \bigg)
+\end{equation}
 
 ## Proportional odds cummulative logit model
 
 We have three possible outcomes: a home win, tie, or visitor win. Each outcome has a probability $\pi_i$ of happening. The probabilities of the three outcomes sum to 1 as no other outcome is possible.
 $\pi_h +\pi_t +\pi_v = 1$
 
-The probability that home loses is $1-\pi_h-\pi_t=\pi_v$ and it's log odds are $L_v=\log{ \big( \frac{\pi_v}{\pi_h+\pi_t} \big)}$
+The probability that home loses is $1-\pi_h-\pi_t=\pi_v$ and its log odds are $L_v=\log{ \big( \frac{\pi_v}{\pi_h+\pi_t} \big)}$
 
-The probability that home loses or ties is $1-\pi_h=\pi_v + \pi_t$ and it's log odds are $L_t=\log{ \big( \frac{\pi_v + \pi_t}{\pi_h} \big)}$
+The probability that home loses or ties is $1-\pi_h=\pi_v + \pi_t$ and its log odds are $L_t=\log{ \big( \frac{\pi_v + \pi_t}{\pi_h} \big)}$
 
 The log odds of these two events are assumed to be a linear combination of the predictors; $L_v = \alpha_v + X\beta_v$ and $L_t = \alpha_t + X\beta_t$. 
 
@@ -421,6 +452,34 @@ stargazer(m_days, m_bin, single.row = TRUE,
 ```
 
 NEED TO INCLUDE THRESHOLD PROBS
+
+
+## Bivariate Poisson
+
+\begin{table}[H] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}} cccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & cova & m1 & m2 \\ 
+\hline \\[-1.8ex] 
+1 & (l1):(Intercept) & -0.075\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.015) & -0.075\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.015) \\ 
+2 & (l1):Opp\_def\_weak & 0.286\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) & 0.286\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) \\ 
+3 & (l1):Opp\_load & -0.021\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & -0.021\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
+4 & (l1):Opp\_rest & -0.001 (0.003) & -0.001 (0.001) \\ 
+5 & (l1):Team\_att\_str & 0.385\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) & 0.385\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) \\ 
+6 & (l1):Team\_load & 0.016\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & 0.016\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
+7 & (l1):Team\_rest & -0.003 (0.002) & -0.004\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.001) \\ 
+8 & (l2):(Intercept) & 0.871\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.018) & 0.872\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.018) \\ 
+9 & (l2):Opp\_def\_weak & -0.429\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) & -0.43\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) \\ 
+10 & (l2):Opp\_load & 0.018\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & 0.018\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
+11 & (l2):Team\_att\_str & -0.298\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) & -0.299\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) \\ 
+12 & (l2):Team\_load & -0.021\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & -0.022\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
+13 & (l3):(Intercept) & -3.01\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.029) & -3.001\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.03) \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table} 
 
 ## Logistic GLM
 
