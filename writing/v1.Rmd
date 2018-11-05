@@ -5,6 +5,7 @@ date: "8/9/2018"
 output: 
   pdf_document:
     number_sections: true
+fontsize: 12pt
 header-includes:
 - \usepackage{float}
 ---
@@ -17,45 +18,45 @@ library(stargazer)
 
 # Introduction
 
-Many factors influence athletic performance in competitions. Most models predicting results focus on the strength of the team and the location of the competition, but other factors that players and teams can control could have an impact. In this paper, we look at how rest and tiredness impact the performance of soccer teams and tennis players. 
+Many factors influence athletic performance in competitions. Most models predicting results focus on the strength of the team and the location of the competition, but other factors that players and teams can control could have an impact. In this paper, we look at how rest and tiredness impact the performance of soccer teams and tennis players. We find no effect for the number of days since a previous match on soccer outcomes, but find that in best of 3 tournaments the length of the previous tennis match positively impacts the probability of winning the current match and in best of 5 matches, previous match length negatively impacts win probability. 
 
 ## Question 
 
-We aim to quantify the effect of rest on Football match outcomes. We ask two questions looking at short and long-term rest levels of a team:
+We aim to quantify the effect of rest on soccer match outcomes. We ask two questions looking at short and long-term rest levels of a team:
 
 \begin{enumerate}
     \item How does the number of days since a previous match impact the performance of a team?
-    \item How the game load of a team in the past month, two months, and three months impact the performance of a team?
+    \item How does the game load of a team in the past month, two months, and three months impact the performance of a team?
 \end{enumerate}
 
 For tennis, we look at the effect of the previous match attributes on match outcomes. We ask the following questions:
 
 \begin{enumerate}
   \item How does the length of the previous match impact performance?
-  \item How does this effect vary by game attributes?
+  \item How does this effect vary by game attributes such as number of possible set and surface?
 \end{enumerate}
 
 We will look at different models in which performance will be the probability of winning, drawing, and losing or the expected number of goals scored.
 
 ## Football and Tennis
 
-Before explaining our motivation, we will first give an overview of two sports so that the reader may better understand our motivation. 
+Before explaining our motivation, we will first give an overview of the two sports so that the reader may better understand our motivation. 
 
 ### English Football
 
 English soccer is comprised of multiple competitions. 
 
 \begin{itemize}
-    \item The top 20 teams in England play in the \textbf{Premier League}. They play each other twice per season: once at home and once away resulting in 380 games played. Each match earns teams points; a win gets a team 3 points, a draw 1 point, and loss 0 point. The team with the most points win. The bottom two teams are relegated to the EFL Championship. The top two teams from EFL Championship advance to the Premier League. The third to last team in the Premier League and the third team in the EFL Championship playoff to play in the Premier League. \cite{PremierLeague}
-    \item The \textbf{FA cup} is a knockout tournament open to teams in 10 levels of English football. Teams enter the tournament at different times depending on the level they play in. Teams that play in the Premier league enter the 3rd round in January with the hope of making it to the final played in May. \cite{FACup}
-    \item The \textbf{EFL cup} is a tournament similar to the FA cup but open only to levels 1 through 4. Premier League teams enter in August. Matches continue until the final in February. Teams playing in European competitions do not play in this cup \cite{EFLCup}
+    \item The top 20 teams in England play in the \textbf{Premier League}. They play each other twice per season: once at home and once away resulting in 380 games played. Each match earns teams points; a win gets a team 3 points, a draw 1 point, and loss 0 point. The team with the most points win. The bottom two teams are relegated to the EFL Championship. The top two teams from EFL Championship advance to the Premier League. The third to last team in the Premier League and the third team in the EFL Championship playoff to play in the Premier League. (Wikipedia Contributors)
+    \item The \textbf{FA cup} is a knockout tournament open to teams in 10 levels of English football. Teams enter the tournament at different stages depending on the level they play in. Teams that play in the Premier league enter the 3rd round in January with the hope of making it to the final played in May. (Wikipedia Contributors)
+    \item The \textbf{EFL cup} is a tournament similar to the FA cup but open only to levels 1 through 4. Premier League teams enter in August. Matches continue until the final in February. Teams playing in European competitions do not play in this cup (Wikipedia Contributors)
 \end{itemize}
 
 There are two European competitions played with teams from different European leagues:
 
 \begin{itemize}
-    \item The top teams play in the \textbf{Champions League}. It starts with a group stage of 32 teams in which mini round robins are run in each group to determine which 16 teams go on to the tournament. Teams not advancing to the tournament are transferred to the Europa league. In the tournament stage, teams meet twice: once home and once away. Since only one team can move forward to the next round, the return leg can go overtime to decide who win. The final is played in one match in a location determined ahead of time. \cite{Champions} In England the top three premier league teams automatically qualify for the Champions League. The fourth-place team qualifies for a playoff round. \cite{PL}
-    \item The \textbf{Europa league} is similar to the Champions league in format but played with the top teams not qualifying for the champions league. Depending on how a team qualifies it enters the competition at different rounds. \cite{EuropaLeague} The 5th place Premier league team qualifies for the group stage, with the winners of the FA cup and EFL cup qualifying for earlier rounds. \cite{PL}
+    \item The top teams play in the \textbf{Champions League}. It starts with a group stage of 32 teams in which mini round robins are run in each group to determine which 16 teams go on to the tournament. Teams not advancing to the tournament are transferred to the Europa league. In the tournament stage, teams meet twice: once home and once away. Since only one team can move forward to the next round, the return leg can go overtime to decide who win. The final is played in one match in a location determined ahead of time. In England the top three premier league teams automatically qualify for the Champions League. The fourth-place team qualifies for a playoff round. (Wikipedia Contributors)
+    \item The \textbf{Europa league} is similar to the Champions league in format but played with the top teams not qualifying for the champions league. Depending on how a team qualifies it enters the competition at different rounds.  The 5th place Premier league team qualifies for the group stage, with the winners of the FA cup and EFL cup qualifying for earlier rounds. (Wikipedia Contributors)
 \end{itemize}
 
 Depending on the year, the schedule is inter-spaced with 2-week \textbf{international breaks}, in which players are called to represent their national team in international friendlies or qualifying matches for continent or world cups. 
@@ -66,7 +67,6 @@ The wide variety of competition that a team can play in means that teams have di
 source("~/Documents/masters_paper/Figures/Make/gameLoad.R")
 p
 ```
-
 
 ### Men's professional tennis
 
@@ -91,14 +91,14 @@ p2
 
 ## Relevance
 
-Football game scheduling varies from league to league. In particular, some leagues take a winter break while others do not. Some speculate that this winter break influences performance in inter-league competitions such as the Champions and Europa league by allowing teams that have the break to be more refreshed. \cite{Winter}
+Football game scheduling varies from league to league. In particular, some leagues take a winter break while others do not. Some speculate that this winter break influences performance in inter-league competitions such as the Champions and Europa league by allowing teams that have the break to be more refreshed. (Glendenning)
 
-Further Champions and Europa league games are played Tuesday through Thursday, while club games are played Friday through Mondays, leading to a variety of rest days going into Champions and Europa league games. (NEED CITATION) Some leagues are more willing to accommodate teams playing in European competitions than others by letting them schedule their games earlier in the weekend.
+Further Champions and Europa league games are played Tuesday through Thursday, while club games are played Friday through Mondays, leading to a variety of rest days going into Champions and Europa league games. (Critchley) Some leagues are more willing to accommodate teams playing in European competitions than others by letting them schedule their games earlier in the weekend.
 
-In tennis, seedings are designed so that players' pathes to the finals are as fair as possible. The tournament is set up at the beginning of the tournament such that assuming the highest ranked player always wins, in each round, the highest ranked player always plays the lowest ranked player. Sometimes a low ranked player will upset high ranked player which can cause an easier path for future players. 
+In tennis, seedings are designed so that players' pathes to the finals are as fair as possible. The tournament is set up at the beginning of the tournament such that assuming the highest ranked player always wins, in each round, the highest ranked player always plays the lowest ranked player. Sometimes a low ranked player will upset high ranked player which can cause an easier path for future players. (Cooper)
 
 Here we look at whether the length of the previous match on a player's path impacts performance on the current game. While some of the influence of a match's length are outside a player's control, for example how hard their oponent is to beat, other attributes might not be.
-An effect of previous matches on present matches could affect how matches are played. If player's know that long matches hurt them in the long run, they might work harder to win quickly. Of course, we also need to measure the LR effect of working harder before making such a suggestion.
+An effect of previous matches on present matches could affect how matches are played. If player's know that long matches hurt them in the long run, they might work harder to win quickly. Of course, we also need to measure the long run effect of working harder before making such a suggestion.
 
 ## Approach
 
@@ -114,15 +114,15 @@ For tennis, we measure the effects of previous match attributes on the next matc
 
 Most of the research on impacts of game scheduling focuses on injury and measures of certain activities in games such as distance ran and the number of sprints, but not on overall game outcomes. 
 
-Over the past decades, Carlos Lago Penas conducted a series of studies looking at how physical behaviors of players such as distance run at certain speeds evolve over a series of consecutive games with small rest periods and found minor to no differences in physical behaviors across games. \cite{Penas1, Penas2}
+Over the past decades, Carlos Lago Penas conducted a series of studies looking at how physical behaviors of players such as distance run at certain speeds evolve over a series of consecutive games with small rest periods and found minor to no differences in physical behaviors across games. 
 
 In 2010, Dupont et al. found a higher injury rate for football players who played two matches a week compared to players playing one match a week.
 
 ### Modeling football match outcomes
 
-The sports statistic community quickly converged on the best way to model soccer scores. In 1982, M. J. Maher introduced two independent Poisson distributions as a way to model soccer scores. He proposed using a team's attacking strength and its opponent's defensive weakness as predictors of the number of goals scored. Maher also found that using a Bivariate Poisson distribution with a correlation of 0.2 improved his model's fit. \cite{Maher}
+The sports statistic community quickly converged on the best way to model soccer scores. In 1982, M. J. Maher introduced two independent Poisson distributions as a way to model soccer scores. He proposed using a team's attacking strength and its opponent's defensive weakness as predictors of the number of goals scored. Maher also found that using a Bivariate Poisson distribution with a correlation of 0.2 improved his model's fit. 
 
-Expanding on Maher's work, Karlis and Ntzoufras proposed a diagonal inflated bivariate Poisson model in which the probabilities of draws are increased in 2003. \cite{karlis} They also created an R package to fit bivariate Poisson GLMs which we will utilize. \cite{bivpois}
+Expanding on Maher's work, Karlis and Ntzoufras proposed a diagonal inflated bivariate Poisson model in which the probabilities of draws are increased in 2003.  They also created an R package to fit bivariate Poisson GLMs which we will utilize.
 
 We will also look at the proportional odds ordered logistic model which predicts the probability of a win, tie, or loss.
 
@@ -142,7 +142,7 @@ Most models aimed at tennis betting use the hierarchical structure of tennis mat
 
 #### Data set
 
-The data was obtained from Kaggle and contains outcomes and attributes of ATP (Association of Tennis Professionals) Mens tennis matches between 2000 and 2017. We split each game into two observations, one for each player.
+The data was obtained from Kaggle and contains outcomes and attributes of ATP (Association of Tennis Professionals) mens tennis matches between 2000 and 2017. We split each game into two observations, one for each player.
 
 #### Response variable
 
@@ -177,17 +177,17 @@ stargazer(s, summary = FALSE, no.space = TRUE, header = FALSE,
 
 ##### Sets needed to win
 
-Most men's tennis matches are won by a player winning two sets. The four major tournaments: Rolland Garros, Wimbledon, US Open, and Australian open require three sets to be won in order to win
+Most men's tennis matches are won by a player winning two sets. The four major tournaments: Rolland Garros, Wimbledon, US Open, and Australian open require three sets to be won in order to win.
 
 #### Games looked at
 
-We look at all matches for which both players played their previous match in the same tournament. This allows us to make sure that the previous match happened within a reasonable number of days and that surface and best of quantity are the same between player histories. We remove any match including and unranked player
+We look at all matches for which both players played their previous match in the same tournament. This allows us to make sure that the previous match happened within a reasonable number of days and that surface and best of quantity are the same between player histories. We remove any match including unranked player
 
 ### Soccer
 
 #### Data set
 
-The R package "engsoccerdata" provides us with scores from matches in England as well as European competition matches. \cite{Curley} We limit ourselves to matches occurring in seasons 1995 through 2015. The design of English Football stays consistent throughout this time range, and the data set is complete for these years.
+The R package "engsoccerdata" provides us with scores from matches in England as well as European competition matches. We limit ourselves to matches occurring in seasons 1995 through 2015. The design of English Football stays consistent throughout this time range, and the data set is complete for these years.
 
 #### Response variable
 
@@ -266,8 +266,7 @@ Away & 1-5 days & $1,256$ & $512$ \\
 
 #### Control variables
 
-Using Premier Leauge games, we calculate each team's attacking and defensive weakness. \cite{Cronin} 
-The attacking strength is the ratio of the average number of goals scored by a team in a season to the average number of goals scored in the league that season. The defensive weakness is the ratio of the average number of goal conceded by a team in a season to the average number of goals conceded in the league that season. 
+Using Premier Leauge games, we calculate each team's attacking and defensive weakness. (Cronin) The attacking strength is the ratio of the average number of goals scored by a team in a season to the average number of goals scored in the league that season. The defensive weakness is the ratio of the average number of goal conceded by a team in a season to the average number of goals conceded in the league that season. 
 It is generally believed that the performance of a team differs depending on whether the team is home or visiting; therefore we calculate Attacking Strength and Defensive Weakness for home and away games. The better a team, the higher its attacking strength and the lower its defensive weakness strength will be. We will use the previous years attacking and defensive weakness to control for a team's ability. We exclude recently promoted teams from our analysis as we cannot use their previous season to calculate such strengths, since they played against a different set of teams. The distribution of attacking and defensive strengths is shown below.
 
 ```{r, fig.height = 4, fig.width = 6, fig.align='center'}
@@ -305,13 +304,18 @@ The Poisson model is most commonly used to model soccer scores. It assumes that 
 
 ### Verifying the Poisson assumption under the null
 
-One of the defining features of the Poisson model is the fact that the mean of a Poisson distribution equals its variance. As the figure below shows for most teams this equality holds. 
+We use a Chi Squared test to verify that goals are poisson distributed. The Chi Squared test allows us to determine if the difference between two distribution is significant. We calculate the expected frequency of each number of goals under the poisson assumption and compare it to the actual number of goals. We use the difference between the two to calculate a sum which we expect to be Chi Squared distributed.
 
-```{r, fig.height = 3, fig.width = 6, fig.align='center'}
-source("~/Documents/masters_paper/Figures/Make/goalMeanVsVariance.R")
-p
-```
+$\sum_{i=1}^k{\frac{(f_i-e_i)^2}{e_i}} \sim \chi_k^2$
 
+Where
+\begin{itemize}
+    \item $k$ is the maximum number of goal. 9 for home teams and 6 for visitor teams.
+    \item $f_i$ is the observed frequency
+    \item $e_i$ is the expected frequency
+\end{itemize}
+
+We find that sum is not distributed Chi Squared with a p-value of 0.0072 for home goals and 0.0039 for visitor goals. The distributions are slightly overdispered as can be seen in figure 4 where we have more games with zero and more than 4 goals than expected. Calculating the overdispersion we find home goals to be overdispered by 1.13 and visitor goals by 1.11. Because the overdispersion is so close to 1, we will not use a quasipoisson model which takes overdispersion into account and stick to the poisson model.
 
 ## Linear model for goal difference
 
@@ -388,11 +392,13 @@ Logistic regression allows us to model binary outcomes where one outcome, here a
 
 # Results
 
-## Simple Poisson GLM
+## Soccer
 
-Table \ref{table:glm_simple} summarizes the GLM models for the number of home and away goals. Rest comes in the model either as the number of days since the previous game (1) and (3) or as whether or not the team had more than six days of rest (2) and (4). In neither of the four models do we see rest as affecting the number of goals scored
+### Simple Poisson GLM
 
-The strongest effects come from the attacking strength of the home team and defensive weakness of the visitor team. This not too surprising as most models looking to predict soccer outcomes use the product of these two quantities as the expected number of goals. A team with a high attacking strength should score more since it has in the past, and a team with a high defensive weakness should take in more goals as it has in the past.
+Table 5 summarizes the GLM models for the number of home and away goals. Rest comes in the model either as the number of days since the previous game (1) and (3) or as whether or not the team had more than 5 days of rest (2) and (4). In neither of the four models do we see rest as affecting the number of goals scored
+
+The strongest effects come from the attacking strength of the home team and defensive weakness of the visitor team. This not too surprising as most models looking to predict soccer outcomes use the product of these two quantities as the expected number of goals. A team with a high attacking strength should score more since it has scored more in the past, and a team with a high defensive weakness should take in more goals as it has in the past.
 
 We also see an effect from the game load of a team. Game load also measure the quality of a team. Better teams will qualify for more games and thus have a higher game load. We expect to see an increase in a team's game load increase its predicted number of goals and an increase in its opponent's game load decrease a team's predicted number of goal; which is what we see.
 
@@ -407,19 +413,19 @@ stargazer(m_home_days, m_home_bin, m_vis_days, m_vis_bin, single.row = TRUE,
                                "Opp. defensive weakness",
                                "Team load", "Opponent load",
                                "Constant"),
-          table.placement = "H")
+          table.placement = "H", font.size = "footnotesize")
 ```
 
 
-## Linear model for goal difference
+### Linear model for goal difference
 
-Table \ref{table:lm_simple} summarizes the model for the square root goal difference. We find that the rest of the home and away team have no significant impact on the goal difference. Predictors highlighting the strength of the teams involved are most important.
+Table 6 summarizes the model for the square root goal difference. We find that the rest of the home and away team have no significant impact on the goal difference. Predictors highlighting the strength of the teams involved are most important.
 
 ```{r results = "asis"}
 source("~/Documents/masters_paper/models/lmGoalDiff.R")
 stargazer(lm_diff, single.row = TRUE, header = FALSE,
           title = "Linear model for the difference in goals scored", 
-          dep.var.labels = "Goal difference",
+          dep.var.labels = "Goal difference", font.size = "footnotesize",
           covariate.labels = c("Team rest (days)", "Opponent rest (days)",
                                "Team attacking strength", 
                                "Team defensive weakness",
@@ -431,13 +437,13 @@ stargazer(lm_diff, single.row = TRUE, header = FALSE,
 ```
 
 
-## Proportional odds cummulative logit model
+### Proportional odds cummulative logit model
 
-The odds of moving from a visitor win to a tie or a tie to a home win increase when the home team's attacking strength, home team's game load, or visitor's team defensive weakness increases. The opposite happens when the teams are reversed. The directionality of these findings agrees with the other models. The proportional odds cumulative logit model does not find any effect of rest, whether measured in days or as a binary variable. 
+As seen in the table below, the odds of moving from a visitor win to a tie or a tie to a home win increase when the home team's attacking strength, home team's game load, or visitor's team defensive weakness increases. The opposite happens when the teams are reversed. The directionality of these findings agrees with the other models. The proportional odds cumulative logit model does not find any effect of rest, whether measured in days or as a binary variable. 
 
 ```{r results = "asis"}
 source("~/Documents/masters_paper/models/orderedLogistic.R")
-stargazer(m_days, m_bin, single.row = TRUE,
+stargazer(m_days, m_bin, single.row = TRUE, font.size = "footnotesize",
           dep.var.labels = "Probability of winning",
           title = "Ordered logistic model", header = FALSE,
           covariate.labels = c("Team rest (days)", "Opponent rest (days)",
@@ -451,47 +457,67 @@ stargazer(m_days, m_bin, single.row = TRUE,
           table.placement = "H")
 ```
 
-NEED TO INCLUDE THRESHOLD PROBS
+### Bivariate Poisson
 
+The bivariate poisson model also finds game load,  attacking strength, and defensive weakness to be significant predictors. It also finds a team's rest to have a small but significant effect on number of goals scored by a team along with a small negative but significant effect on number of goals scored by a team's opponent. 
 
-## Bivariate Poisson
+The model also finds rest of the home team to have a negative effect on the number of goals scored in the game and rest of the visitor team to have a positive effect on number of goals scored in the game.
 
 \begin{table}[H] \centering 
-  \caption{} 
+  \caption{Bivariate model for number of goals scored by each team} 
   \label{} 
+\footnotesize 
 \begin{tabular}{@{\extracolsep{5pt}} cccc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
- & cova & m1 & m2 \\ 
+ &  & (1) & (2) \\ 
 \hline \\[-1.8ex] 
-1 & (l1):(Intercept) & -0.075\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.015) & -0.075\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.015) \\ 
-2 & (l1):Opp\_def\_weak & 0.286\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) & 0.286\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) \\ 
-3 & (l1):Opp\_load & -0.021\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & -0.021\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
-4 & (l1):Opp\_rest & -0.001 (0.003) & -0.001 (0.001) \\ 
-5 & (l1):Team\_att\_str & 0.385\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) & 0.385\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) \\ 
-6 & (l1):Team\_load & 0.016\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & 0.016\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
-7 & (l1):Team\_rest & -0.003 (0.002) & -0.004\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.001) \\ 
-8 & (l2):(Intercept) & 0.871\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.018) & 0.872\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.018) \\ 
-9 & (l2):Opp\_def\_weak & -0.429\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) & -0.43\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) \\ 
-10 & (l2):Opp\_load & 0.018\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & 0.018\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
-11 & (l2):Team\_att\_str & -0.298\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) & -0.299\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) \\ 
-12 & (l2):Team\_load & -0.021\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & -0.022\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
-13 & (l3):(Intercept) & -3.01\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.029) & -3.001\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.03) \\ 
+Home & Intercept & -0.254\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.017) & -0.252\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.018) \\ 
+ & Visitor defensive weakness & 0.427\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) & 0.418\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) \\ 
+ & Visitor load & -0.021\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & -0.019\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
+ & Visitor rest (days) &  & -0.004\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.001) \\ 
+ & Visitor rest \textgreater  5 days & -0.081\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.003) &  \\ 
+ & Home attacking strength & 0.451\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) & 0.45\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) \\ 
+ & Home load & 0.014\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & 0.013\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
+ & Home rest (days) &  & 0.001 (0.001) \\ 
+ & Home rest \textgreater  5 days & 0.06\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.002) &  \\ 
+\hline \\[-1.8ex] 
+Visitor & Intercept & 0.1\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.02) & 0.046\textasteriskcentered \textasteriskcentered  (0.022) \\ 
+ & Visitor Attacking strength & 0.5\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) & 0.506\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) \\ 
+ & Visitor load & 0.008\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & 0.008\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
+ & Visitor rest (days) &  & -0.01\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.001) \\ 
+ & Visitor rest \textgreater  5 days & -0.075\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.003) &  \\ 
+ & Home defensive weakness & 0.275\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) & 0.278\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) \\ 
+ & Home load & -0.028\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & -0.028\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
+ & home rest (days) &  & 0.01\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.001) \\ 
+ & Home rest \textgreater  5 days & 0.055\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.003) &  \\ 
+\hline \\[-1.8ex] 
+Game & Intercept & 0.156 (0.179) & 0.872\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.164) \\ 
+ & Visitor attacking strength & -0.891\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.054) & -0.891\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.059) \\ 
+ & Visitor defensive strength & -2.785\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.073) & -2.641\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.083) \\ 
+ & Visitor load & -0.008\textasteriskcentered \textasteriskcentered  (0.003) & -0.012\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.004) \\ 
+ & Visitor rest &  & 0.054\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.011) \\ 
+ & Visitor rest \textgreater  5 days & 0.456\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.086) &  \\ 
+ & Home attacking strength & -1.241\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.08) & -1.289\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.077) \\ 
+ & Home defensive weakness & -0.478\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.054) & -0.505\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.058) \\ 
+ & Home load & 0.057\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.003) & 0.051\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.003) \\ 
+ & Home rest (days) &  & -0.07\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.01) \\ 
+ & Home rest \textgreater  5 days & -0.129\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.035) &  \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table} 
 
-## Logistic GLM
+## Tennis - Logistic GLM
 
-In the simplest model looking at how the difference in minutes of the previous matches affects the probability of winning we see that having played a longer previous match than one's opponent increases the probability of winning. We then look for the diminishing effect of the number of prior minutes played by looking at the importance of minutes played squared and found no diminishing effects.  
+In the simplest model (Table 9-1) looking at how the difference in minutes of the previous matches affects the probability of winning we see that having played a longer previous match than one's opponent increases the probability of winning. We then look for the diminishing effect of the number of prior minutes (Table 9-2) played by looking at the importance of minutes played squared and found no diminishing effects.  
 
-When we control for the difference in ranking points between the two players the effect disappears. Further, controlling for whether or no a player or his opponent was seeded further helps predict tennis match outcomes.
+When we control for the difference in ranking points between the two players (Table 9-3) the effect disappears. Further, controlling for whether or not a player or his opponent was seeded (Table 9-4) further helps predict tennis match outcomes.
 
 ```{r results = "asis"}
 source("~/Documents/masters_paper/models/tennisLog.R")
 stargazer(m0, m02, m1, m2, single.row = TRUE, header = FALSE, 
           table.placement = "H", dep.var.labels = "Win probability",
-          type = "latex", 
+          type = "latex", font.size = "footnotesize",
           covariate.labels = c("Prev. match length diff. (hours)",
                                "Squared match length diff.",
                                "Difference in ranking points", 
@@ -501,16 +527,14 @@ stargazer(m0, m02, m1, m2, single.row = TRUE, header = FALSE,
           title = "Logistic model for the probability of winning a tennis match")
 ```
 
-When we look at the effect by best of quantity, we find a positive effect on winning probability for best of three matches and a negative effect on winning probability for best of five matches. 
+When we look at the effect by best of quantity (Table 10-1), we find the past match length difference to have a positive effect on winning probability for best of three matches and a negative effect on winning probability for best of five matches. 
 
-We then look at how surface plays a role we find that prior match length increases the probability of winning for clay surfaces and decreases the probability of winning for grass surfaces. 
-
-We then split the surface effects by best of quantity and see that clay only increases the probability of winning on best of three matches and grass only decreases the probability of winning for best of 5 matches. As previously seen the effects are positive for best of three matches and negative for best of five matches.
+We then look at how surface plays a role (Table 10-2) we find that prior match length increases the effect of past match length difference on the probability of winning for clay surfaces and decreases the effect of past match length difference the probability of winning for grass surfaces. 
 
 ```{r results = "asis", cache = FALSE}
 source("~/Documents/masters_paper/models/tennisLog.R")
 stargazer(m4, m3, single.row = TRUE, header = FALSE, table.placement = "H",
-          dep.var.labels = "Win probability",
+          dep.var.labels = "Win probability", font.size = "footnotesize",
           order = c("delta_rank_pts", "player_seed", "opp_seed"),
           covariate.labels = c("Diff. in ranking points",
                                "Player is seeded",
@@ -519,15 +543,18 @@ stargazer(m4, m3, single.row = TRUE, header = FALSE, table.placement = "H",
                                "Surface: clay - PMLD (hours)",
                                "Surface: grass - PMLD (hours)",
                                "Surface: hard - PMLD (hours)",
-                               "Best of 3", 
-                               "Best of 5"),
+                               "Best of 3 - PMLD (hours)", 
+                               "Best of 5 - PMLD (hours)"),
           type = "latex", title = "Effect of previous match length on winning probability by match type")
 ```
+*PMLD = Past match length difference
+
+We then split the surface effects by best of quantity (Table 11) and see that clay only increases the probability of winning on best of three matches and grass only decreases the probability of winning for best of 5 matches. As previously seen the effects are positive for best of three matches and negative for best of five matches.
 
 ```{r results = "asis", cache = FALSE}
 source("~/Documents/masters_paper/models/tennisLog.R")
 stargazer(m53, m55, single.row = TRUE, header = FALSE, table.placement = "H",
-          dep.var.labels = "Win probability",
+          dep.var.labels = "Win probability", font.size = "footnotesize",
           order = c("delta_rank_pts", "player_seed", "opp_seed"),
           covariate.labels = c("Diff. in ranking points",
                                "Player is seeded",
@@ -539,20 +566,26 @@ stargazer(m53, m55, single.row = TRUE, header = FALSE, table.placement = "H",
           column.labels = c("Best of 3", "Best of 5"),
           type = "latex", title = "Effect of previous match length on winning probability by match type")
 ```
+
 # Discussion
 
 ## Soccer
 
-### Comparison of models 
+### Symmetry of predicting home vs. visitor outcomes
 
-\begin{itemize}
-  \item Team effects agree
-  \item Which model is most valid
-\end{itemize}
+Across models, the predictors for home goal or probability of winning have the same order of magnitude and signs as the predictors for visitor goal or probability of winning. They vary in their actual amounts because the baseline probabilities of winning and average number of goals for home and away teams differ.
+
+The one difference we do notice between a home and visitor effect is that of rest on the number of goals scored in a game. Home rest will decrease the number of goals across both teams, while visitor rest will increase it across both team. This suggest that perhaps the visiting team at a soccer game sets the pace in how aggresively it attacks which depends on its rest level. The home team responds by matching that aggresivity. The home team aims to keep the pace slow (minimize the overall number of goals) and is better equiped to do so when well rested.
 
 ### Rest as days or as binary
 
+In all but the bivariate model rest is not a significant predictor regardless of whether it is included as a binary or continuous variable. The magnitude of the binary predictor tends to be about 10 times that of the continuous predictor. To avoid international breaks, we filter out all games where rest exceeds eight days, so the effect of the binary variable being about 10 times that of the continuous variable instead of 6 to 8 times the continuous variable suggest that small variations do not matter as much as large variation. 
+
+When calculating the effect of rest, we only look at Premier League games which happen Friday through Sunday. If a team has five or fewer days of rest, it is highly likely that the team had non-Premier league game during that week. What we are seeing is that teams played during the week are slightly less likely to win during the weekend than if they have not played during the week.
+
 ### Importance of game load
+
+In our first attempt at running these models we did not include game load - the number of games a team plays in a season. We found that less rested teams were more likely to win games. This was because better teams are more likely to qualify to play in more games and therefore generally have less rest time between games. Adding season game load as a covariate allows us to control for that. Once we added the covariate we no longer found an effect for rest except in the bivariate model.
 
 ## Tennis
 
@@ -560,16 +593,16 @@ stargazer(m53, m55, single.row = TRUE, header = FALSE, table.placement = "H",
 
 In the simplest model for the probability of winning a tennis match, the effect of the difference in the length of the player's previous matches is highly significant. However, when we add the difference in the players' ranking points and binary variables for whether or not the players' involved are seeded, the significance of the effect disappears suggesting some correlation between the predictors
 
-We find a correlation of 0.070 with a p-value less than 1 e-15 between a player's ranking points and the time needed to win a match. We also find that seeded players enter matches having played on average 3.87 minutes (SE 0.28) more in their previous match than their unseeded opponents. Both of these findings suggest that better players play longer matches. 
+We find a correlation of 0.070 with a p-value less than $1*10^{-15}$ between a player's ranking points and the time needed to win a match. We also find that seeded players enter matches having played on average 3.87 minutes (SE 0.28) more in their previous match than their unseeded opponents. Both of these findings suggest that better players play longer matches. 
 
 One hypothesis for why better players play longer match is that they are more able to put up a fight and last longer against strong opponents. If that is true, we expect the length of matches of better players to increase more with the strength of their opponents than weaker players. 
 
-In the Poisson model below in which we assume that the length of a tennis match is Poisson distributed according to a parameter which is linear in the predictors, we see that the length of seeded players matches increases with the ranking of their opponents more than the length of the matches of unseeded players does. This supports our hypothesis that better players (proxied by seeded players), put up stronger fights against better opponents than unseeded players do.
+In the Poisson model below in which we assume that the length of a tennis match is Poisson distributed according to a parameter which is linear in the predictors, we see that the length of seeded players matches increases with the ranking of their opponents more than the length of the matches of unseeded players does: 0.024 min/ranking point vs 0.005 min/ranking point. This supports our hypothesis that better players (proxied by seeded players), put up stronger fights against better opponents than unseeded players do.
 
 ```{r results = "asis", cache = FALSE}
 source("~/Documents/masters_paper/Figures/Make/tennisDiscussion.R")
 stargazer(m1, single.row = TRUE, header = FALSE, 
-          table.placement = "H", 
+          table.placement = "H", font.size = "footnotesize",
           covariate.labels = c("Unseeded player - Opponent rank points",
                                "Seeded player - Opponent rank points"),
           type = "latex", title = "Effect of opponent's ranking points on match length by player seed")
@@ -592,7 +625,7 @@ stargazer(m43, m45, single.row = TRUE, header = FALSE, table.placement = "H",
                                "3 Set - PMLD (hours)",
                                "4 Set - PMLD (hours)",
                                "5 Set - PMLD (hours)"),
-          column.labels = c("Best of 3", "Best of 5"),
+          column.labels = c("Best of 3", "Best of 5"),  font.size = "footnotesize",
           type = "latex", title = "Effect of number of sets in the current match on importance of previous match difference")
 ```
 
@@ -604,22 +637,63 @@ When we break down the effect of previous match length difference by surface and
 
 The effects for best of 5 matches are negative across the board. The magnitude of the effect does differ a little bit. 
 
-## Comparison of sports
-
-### Why is it easier to pick up effects on tennis
-
-\begin{itemize}
-  \item One player vs. many. Football manager can control how tired his players are by rotating players something which tennis players cannot do.
-  \item Larger variation in the predictor for tennis
-\end{itemize}
-
 # Conclusion
 
-# Appendix
+## Tennis
+
+We find an effect for the difference in length of the previous match between players on the probability of a player winning under certain conditions. In the simplest model where we look at the effect of rest difference while controlling for player ability, we do not see an effect. When we break the effect out by max number of sets in the match we observe a small significant effect; in best of 3 tournaments, having played a longer previous match increases the probability of winning slightly while in best of 5 tournaments it decreases slightly. We test the hypothesis that there are diminishing returns to previous match length but find that this is not the case.
+
+## Soccer
+
+We try a variety of models (Poisson, Bivariate Poisson, and ordered logit) to evaluate the effect of rest days on soccer match outcomes and find no significant effect. We notice that the four control covariates, attacking strength, defensive weakness, and home and visitor game load which have significant effects, have the same magnitude and direction for their effect. This observation confirms existing models in which these are the main predictors. 
+## Why we see effects in tennis and not soccer
+
+### Tennis is easier to model than soccer
+
+In our soccer model, we look at how the number of days of rest before a match affects the winning probability and the number of goals scored. We see little variation in the number of days of rest across matches: 45% of games are played within equally rested teams and 76% of games are played between teams with at most one day of rest difference. If the difference is small and there are other factors affecting outcomes we will not be able to see it in a model where most of the differences in rest are small. In the tennis model, we look at how the length of the previous tennis match affects the probability of winning. The average difference in minutes played in the previous match between players is 39 minutes which is 38% percent of the average length of a tennis match. 
+
+Perhaps more important than our predictor, the response variable explains more of why it is easier to measure an effect in tennis than soccer. The number of points in tennis matches is much much higher than in soccer. This means that scoring a point which affects the probability of winning is easier in tennis than in soccer. Tiredness can more easily have a measurable impact on tennis scores than rest does in soccer. 
+
+### Soccer players can be substituted but not tennis players
+
+Another reason for why we see more effects for tennis than soccer is the fact that soccer teams generally have at least 23 players, but only 11 players and three substitutes play in each game. This means that managers can control how tired players are by playing different players in different games. In singles men's tennis, there is only one player; if for a player the length of a match played three days ago affects a match played today we will be able to measure it. This is not the case in soccer where that player may not play the game today.
 
 # References
 
-# Notes
+Barry Glendenning. "Winter may catch up with english elite as champions league resumes." _The Guardian_, 12 February 2018.
 
-* in 1.1 Do we still care about long-term?
-* 2.1.2 Remake the figure
+Benjamin Cronin. "Poisson distribution: Predict the score in soccer betting." _pinnacle.com_, 27 April 2017.
+
+Carlos Lago Penas and Andrzej Soroka. "The effect of a succession of matches on the physical performance of elite football players during the world cup brazil 2014". _Inter-national Journal of Performance Analysis in Sport_, 16(2):434–441, 2016.
+
+Carlos Lago Penas. "The effect of a succession of matches on the activity profiles of professional soccer players." _European Congress of Sports Medicine_, 3rd Central European Congress of Physical Medicine and Rehabilitation, 2011.
+
+Dimitris Karlis and Ioannis Ntzoufras (2007). "bivpois: Bivariate Poisson Models Using The EM Algorithm." _R package version 0.50-3.1_. http://www.stat-athens.aueb.gr/~jbn/papers/paper14.htm
+
+Dries R. Goossens, Jurgen Kempeneers, Ruud H. Koning and Frits C.R. Spieksma. "Winning in straight sets helps in Grand Slam tennis." _International Journal of Performance Analysis in Sport_, 2015(15):1007-1021.
+
+GMAdevs. November 2017. Association of Tennis Professionals Matches, Version 2. _Kaggle_, https://www.kaggle.com/gmadevs/atp-matches-dataset.
+
+Hlavac, Marek (2018). "stargazer: Well-Formatted Regression and Summary Statistics Tables." _R package version 5.2.1_. https://CRAN.R-project.org/package=stargazer
+
+H. Wickham. "ggplot2: Elegant Graphics for Data Analysis". Springer-Verlag New York, 2009.
+
+James Curley (2016). engsoccerdata: English and European Soccer Results 1871-2016. R package version 0.1.5. https://CRAN.R-project.org/package=engsoccerdata
+  
+Jeff Cooper. "Seeding: Key to Competitive Tourneys". _ThoughtCo_, 28 November 2017.
+
+Karlis Dimitris and Ioannis Ntzoufras. "Analysis of sports data using bivariate poisson models." _Journal of the Royal Statistical Society: Series D (The Statistician)_ ,52(3):381–393, 2003
+
+Klaassen, Franc J. G. M. and Jan R. Magnus. “Forecasting the winner of a tennis match.” _European Journal of Operational Research_, 148(2003):257-267.
+
+Maher M. J. "Modeling association football scores." _Statistica Neerlandica_, 36(3):109–118, 1982.
+
+Mark Critchley. "Manchester United manager Jose Mourinho claims English clubs are at a disadvantage in the Champions League". _Independent_, 11 September 2017.
+
+Michal Sipko. "Machine Learning for the Prediction of Professional Tennis Matches." _Imperial College London_, 15 June 2015
+
+Tiago Julio Costa Pereira, Fábio Yuzo Nakamura, Mayra Tardelli de Jesus, Claudio Luís Roveri Vieira, Milton Shoiti Misuta, Ricardo Machado Leite de Barros & Felipe Arruda Moura (2017) "Analysis of the distances covered and technical actions performed by professional tennis players during official matches." _Journal of Sports Sciences_, 35(4):361-368.
+
+Wikipedia contributors, "Premier League", "FA Cup", "EFL Cup", "UEFA Champions League", "UEFA Europa League". _Wikipedia_, The Free Encyclopedia
+
+

@@ -13,13 +13,24 @@ for(i in files) {
 }
 
 df = rbindlist(out_m, fill = TRUE)[, 1:49]
-df = df[is.na(minutes) == FALSE]
+df = df[is.na(minutes) == FALSE & round != "RR"]
 
+df$match_id = 1:nrow(df)
 df = df[, c("tourney_name", "winner_id", "loser_id", "tourney_date", "surface", 
             "winner_seed", "loser_seed", "winner_rank", "winner_rank_points", "loser_rank", 
-            "loser_rank_points", "best_of", "round", "minutes", "score")]
+            "loser_rank_points", "best_of", "round", "minutes", "score", "match_id")]
+
+nrow(unique(df[, c("winner_id", "round", "tourney_date")]))
 
 ##### Process Variables #####
+df$round_num = 0
+df$round_num[df$round == "R128"] = 1
+df$round_num[df$round == "R64"] = 2
+df$round_num[df$round == "R32"] = 3
+df$round_num[df$round == "R16"] = 4
+df$round_num[df$round == "QF"] = 5
+df$round_num[df$round == "SF"] = 6
+df$round_num[df$round == "F"] = 7
 
 df$Date = as.Date(paste(substr(df$tourney_date, 1, 4), substr(df$tourney_date, 5, 6),
                 substr(df$tourney_date, 7, 8), sep = "-"))
@@ -37,7 +48,6 @@ df$score = gsub(" DEF", "", df$score)
 df$game = strsplit(df$score, " |-")
 df$set = as.numeric(str_count(df$score, "-"))
 
-
 out = c()
 for(i in df$game){
   out[length(out) + 1] = sum(as.numeric(i), na.rm = TRUE)
@@ -49,41 +59,42 @@ df$tie_break[is.na(df$tie_break)] = 0
 df$game = df$game + df$tie_break
 
 ##### Get player histories #####
-
 df_win = df[, c("tourney_name", "winner_id", "Date", "surface", "best_of", 
-                "round", "minutes", "game", "set", "retired")]
+                "round", "minutes", "game", "set", "retired", "match_id",
+                "round_num")]
 df_win$outcome = "Win"
 names(df_win)[2] = "Player"
 
 df_los = df[, c("tourney_name", "loser_id", "Date", "surface", "best_of", 
-                "round", "minutes", "game", "set", "retired")]
+                "round", "minutes", "game", "set", "retired", "match_id",
+                "round_num")]
 df_los$outcome = "Lose"
 names(df_los)[2] = "Player"
 
 df_hist = rbind(df_win, df_los)
 
-df_hist[, date_order := rank(Date, ties.method = "first"), by = "Player"]
-
 ##### Get prior match
 df_prior = df_hist
-df_prior$date_order = df_prior$date_order + 1
+df_prior$round_num = df_prior$round_num + 1
 
 names(df_prior) = paste("prior_", names(df_prior), sep = "")
 
-df_hist = merge(df_hist, df_prior, by.x = c("date_order", "Player"), 
-by.y = c("prior_date_order", "prior_Player"))
+df_hist = merge(df_hist, df_prior, by.x = c("Date", "round_num", "Player"), 
+                by.y = c("prior_Date", "prior_round_num", "prior_Player"))
 
 df_prior_info = df_hist[, c("Player", "Date", "round", "prior_round", "prior_minutes",
-                            "prior_outcome", "prior_tourney_name", "prior_surface",
-                            "prior_best_of", "prior_Date", "prior_game", "prior_set", "prior_retired")]
+                            "prior_outcome", "prior_tourney_name", "prior_surface", "match_id",
+                            "prior_best_of", "prior_game", "prior_set", "prior_retired", "outcome")]
 
-df_prior_info_w = df_prior_info
+df_prior_info_w = df_prior_info[outcome == "Win"]
 names(df_prior_info_w) = paste("w_", names(df_prior_info_w), sep = "")
-df_prior_info_l = df_prior_info
+df_prior_info_l = df_prior_info[outcome == "Lose"]
 names(df_prior_info_l) = paste("l_", names(df_prior_info_l), sep = "")
 
-df = merge(df, df_prior_info_w, by.x = c("Date", "winner_id", "round"), by.y = c("w_Date", "w_Player", "w_round"))
-df = merge(df, df_prior_info_l, by.x = c("Date", "loser_id", "round"), by.y = c("l_Date", "l_Player", "l_round"))
+df = merge(df, df_prior_info_w, by.x = c("match_id"), by.y = c("w_match_id"))
+df = merge(df, df_prior_info_l, by.x = c("match_id"), by.y = c("l_match_id"))
+
+x = as.data.frame(table(df$Date, df$winner_id, df$round))
 
 ##### One row per player-match #####
 

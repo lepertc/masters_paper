@@ -27,3 +27,24 @@ p <- ggplot(df_mean_var, aes(x = mean, y = variance)) + geom_point(size = 0.5) +
                                            axis.text.y = element_text(size = 8),
                                            axis.title.x = element_text(size = 10),
                                            axis.title.y = element_text(size = 10))
+
+home = as.data.table(table(df$hgoal))
+home$prob_mean = dpois(as.numeric(home$V1), mean(df$hgoal))
+home$expected_mean = home$prob_mean*sum(home$N)
+
+chisq.test(home[, c("N", "expected_mean")]) 
+
+vis = as.data.table(table(df$vgoal))
+vis$prob = dpois(as.numeric(vis$V1), mean(df$vgoal))
+vis$expected = vis$prob*sum(vis$N)
+
+chisq.test(vis[, c("N", "expected")])
+
+m1 <- glm(hgoal ~ 1, df, family = poisson)
+summary(m1)
+
+m2 <- glm(hgoal ~ 1, df, family = quasipoisson)
+summary(m2)
+
+m3 <- glm(vgoal ~ 1, df, family = quasipoisson)
+summary(m3)
