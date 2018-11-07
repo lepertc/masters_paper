@@ -18,3 +18,7 @@ We use a logistic GLM model to evaluate the effect of previous match length on w
 * writing: rmd file for the paper and intermediate versions.
 * models: files in which the models are built.
 * Masters_Paper_Chloe.key/pdf: presentation of the work given on 11/01/18
+
+# Data
+* Soccer: The data comes from the engsoccerdata R package.
+* Tennis: The data was found on kaggle. https://www.kaggle.com/gmadevs/atp-matches-dataset
