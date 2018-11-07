@@ -16,4 +16,5 @@ We use a logistic GLM model to evaluate the effect of previous match length on w
 * Figures: Makes figures and tables for the paper.
 * data-processing: Cleans the data and manipulates it into modelable form.
 * writing: rmd file for the paper and intermediate versions.
+* models: files in which the models are built.
 * Masters_Paper_Chloe.key/pdf: presentation of the work given on 11/01/18
