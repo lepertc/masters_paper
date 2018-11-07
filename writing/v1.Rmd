@@ -1,24 +1,26 @@
 ---
 title: "Effects of rest and tiredness on soccer and tennis match outcomes"
 author: "Chloé Lepert"
-date: "8/9/2018"
+date: "11/6/2018"
 output: 
   pdf_document:
+    toc: true
     number_sections: true
+abstract: "Many factors influence athletic performance in competitions. Most models predicting results focus on the strength of the team and the location of the competition, but other factors that players and teams can control could have an impact. In this presentation, we look at how rest and tiredness impact the performance of soccer teams and tennis players. We find no effect for the number of days since a previous match on soccer outcomes, but find that the length of a tennis match may negatively impact a player in his following match."
 fontsize: 12pt
 header-includes:
 - \usepackage{float}
 ---
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, cache = FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE)
 library(ggplot2); theme_set(theme_bw())
 library(stargazer)
 ```
 
 # Introduction
 
-Many factors influence athletic performance in competitions. Most models predicting results focus on the strength of the team and the location of the competition, but other factors that players and teams can control could have an impact. In this paper, we look at how rest and tiredness impact the performance of soccer teams and tennis players. We find no effect for the number of days since a previous match on soccer outcomes, but find that in best of 3 tournaments the length of the previous tennis match positively impacts the probability of winning the current match and in best of 5 matches, previous match length negatively impacts win probability. 
+Many factors influence athletic performance in competitions. Most models predicting results focus on the strength of the team and the location of the competition, but other factors that players and teams can control could have an impact. In this paper, we look at how rest and tiredness impact the performance of soccer teams and tennis players. We find no effect for the number of days since a previous match on soccer outcomes, but find that the length of a tennis match may negatively impact a player in his following match.
 
 ## Question 
 
@@ -83,7 +85,7 @@ source("~/Documents/masters_paper/Figures/Make/tennisData.R")
 p1
 ```
 
-A set is won by winning at least six games and having a two-game lead resulting in sets of different intensities; a set could be won 6-1, of 10-8. The distribution of the number of games is shown below along.
+A set is won by winning at least six games and having a two-game lead resulting in sets of different intensities; a set could be won 6-1, or 10-8. The distribution of the number of games is shown below along.
 
 ```{r, fig.height = 3, fig.width = 5, fig.align='center'}
 p2
@@ -95,14 +97,14 @@ Football game scheduling varies from league to league. In particular, some leagu
 
 Further Champions and Europa league games are played Tuesday through Thursday, while club games are played Friday through Mondays, leading to a variety of rest days going into Champions and Europa league games. (Critchley) Some leagues are more willing to accommodate teams playing in European competitions than others by letting them schedule their games earlier in the weekend.
 
-In tennis, seedings are designed so that players' pathes to the finals are as fair as possible. The tournament is set up at the beginning of the tournament such that assuming the highest ranked player always wins, in each round, the highest ranked player always plays the lowest ranked player. Sometimes a low ranked player will upset high ranked player which can cause an easier path for future players. (Cooper)
+In tennis, seedings are designed so that players' paths to the finals are as fair as possible. The tournament is set up at the beginning of the tournament such that assuming the highest ranked player always wins, in each round, the highest ranked player always plays the lowest ranked player. Sometimes a low ranked player will upset high ranked player which can cause an easier path for future players. (Cooper)
 
 Here we look at whether the length of the previous match on a player's path impacts performance on the current game. While some of the influence of a match's length are outside a player's control, for example how hard their oponent is to beat, other attributes might not be.
-An effect of previous matches on present matches could affect how matches are played. If player's know that long matches hurt them in the long run, they might work harder to win quickly. Of course, we also need to measure the long run effect of working harder before making such a suggestion.
+An effect of previous matches on present matches could affect how matches are played. If players know that long matches hurt them in the long run, they might work harder to win quickly. Of course, we also need to measure the long run effect of working harder before making such a suggestion.
 
 ## Approach
 
-While we would ideally want to look at how rest affects performance in European competitions doing so is difficult because the teams that play each other in European competitions do not do so frequently enough for us to calculate and control for team ability on an even scale. We will instead model the outcome of Premier League matches, which are set up such that we can easily control for team ability. We will evaluate how matches in competitions other than the premier league influence premier league matches.
+While we would ideally want to look at how rest affects performance in European competitions, doing so is difficult because the teams that play each other in European competitions do not do so frequently enough for us to calculate and control for team ability on an even scale. We will instead model the outcome of Premier League matches, which are set up such that we can easily control for team ability. We will evaluate how matches in competitions other than the premier league influence premier league matches.
 
 This approach assumes that European competition games are similar to Premier League games. This is mostly true except for the fact that European competition games can result in overtime and are higher stakes; a loss results in elimination. We assume that if we see rest impact outcomes in premier league games, rest is likely to have an impact in European games. 
 
@@ -114,7 +116,7 @@ For tennis, we measure the effects of previous match attributes on the next matc
 
 Most of the research on impacts of game scheduling focuses on injury and measures of certain activities in games such as distance ran and the number of sprints, but not on overall game outcomes. 
 
-Over the past decades, Carlos Lago Penas conducted a series of studies looking at how physical behaviors of players such as distance run at certain speeds evolve over a series of consecutive games with small rest periods and found minor to no differences in physical behaviors across games. 
+Over the past decades, Carlos Lago Penas conducted a series of studies looking at how physical behaviors of players, such as distance run at certain speeds, evolve over a series of consecutive games with small rest periods and found minor to no differences in physical behaviors across games. 
 
 In 2010, Dupont et al. found a higher injury rate for football players who played two matches a week compared to players playing one match a week.
 
@@ -142,7 +144,7 @@ Most models aimed at tennis betting use the hierarchical structure of tennis mat
 
 #### Data set
 
-The data was obtained from Kaggle and contains outcomes and attributes of ATP (Association of Tennis Professionals) mens tennis matches between 2000 and 2017. We split each game into two observations, one for each player.
+The data was obtained from Kaggle and contains outcomes and attributes of ATP (Association of Tennis Professionals) Men's tennis matches between 2000 and 2017. Each of our observations represents a game and contains information about one of the players and his opponent. The player is selected at random such that the player wins 50% of matches.
 
 #### Response variable
 
@@ -150,7 +152,7 @@ The response variable is whether or not a player won a game. As players have to 
 
 #### Predictors
 
-The predictor is the length of the previous match played by the player in hours Three-quarters of the games are less than 2 hours long, but games can go on for many more hours. About five percent of games go on for more than 3 hours.
+The predictor is the length of the previous match played by the player in hours. Three-quarters of the games are less than 2 hours long, but games can go on for many more hours. About five percent of games go on for more than 3 hours.
 
 ```{r, cache = FALSE}
 source("~/Documents/masters_paper/Figures/Make/tennisData.R")
@@ -158,7 +160,7 @@ source("~/Documents/masters_paper/Figures/Make/tennisData.R")
 
 #### Control variables
 
-We control for player ability by looking at the player's rank at the beginning of the tournament as well as the number of points earned in order to achieve the ranking. Both controls are important in predicting winners. They differ slightly in that the player ranked number 1 could be leading by a few points or hundreds of point. The broader scale of ranking points provides a better proxy for underlying player ability.
+We control for player ability by looking at the player's rank at the beginning of the tournament as well as the number of points earned in order to achieve the ranking. Both controls are important in predicting winners. They differ slightly in that the player ranked number 1 could be leading by a few points or hundreds of points. The broader scale of ranking points provides a better proxy for underlying player ability.
 
 We also control for whether or not a player is seeded. Seeded players tend to be the top 32 players in the tournament and do not have to play as many early rounds.
 
@@ -181,7 +183,7 @@ Most men's tennis matches are won by a player winning two sets. The four major t
 
 #### Games looked at
 
-We look at all matches for which both players played their previous match in the same tournament. This allows us to make sure that the previous match happened within a reasonable number of days and that surface and best of quantity are the same between player histories. We remove any match including unranked player
+We look at all matches for which both players played their previous match in the same tournament. This allows us to make sure that the previous match happened within a reasonable number of days and that surface and best of quantity are the same between player histories. We remove any match including unranked player.
 
 ### Soccer
 
@@ -223,7 +225,7 @@ Visitor win & $1,187$ & $0.276$ \\
 
 #### Predictors
 
-Using this dataset, we calculate the number of days since the previous game. Before performing our analysis on the effect of rest time, we remove games in which either of the team's previous game was over eight days ago. If the team's last non-international game was more than eight days prior, it is possible that an international break occured which we have no way of controlling for. 
+Using this dataset, we calculate the number of days since the previous game. Before performing our analysis on the effect of rest time, we remove games in which either of the team's previous game was over eight days ago. If the team's last non-international game was more than eight days prior, it is possible that an international break occurred which we have no way of controlling for. 
 
 The distribution of rest time for the home and away team is shown below. 
 
@@ -281,7 +283,7 @@ We also control for the number of games a team plays each season. Better teams w
 As described in the previous subsections there are two points at which we remove premier league games from our data set.
 \begin{enumerate}
   \item{Matches with recently promoted teams. Since we use the previous premier league season to calculate the team's attacking strength and defensive weakness we cannot calculate these quantities for recently promote teams. Removing these matches removes 2540 out of 7980 matches (32\%).}
-  \item{Matches with over eight days of rest. It is likely that an international match happened during the break which we do not have in our data. Leaving these matches in would lead to low rest matches presenting themselves as high rest matches. Removing these matches removes 1144 out of 5440 matches (21\%).}
+  \item{Matches with over eight days of rest. It is likely that an international match happened during the break which we do not have in our data. Leaving these matches in would lead to low rest matches presenting themselves as high rest matches. Removing these matches removes 1144 out of the remaining 5440 matches (21\%), leaving 4296 matches for analysis.}
 \end{enumerate}
 
 # Methods
@@ -290,7 +292,7 @@ There are many ways to model the outcomes of sporting events. We first look at w
 
 ## Poisson model
 
-The Poisson model is most commonly used to model soccer scores. It assumes that the number of goals scored by a team in a soccer game follows a Poisson distribution of some parameter. We will use a GLM with a Poisson link to predict the parameter. In the traditional Poisson model for the number of goals scored by a team, the team's attacking strength and its opponent's defensive weakness are the covariates used to model the parameter. Here we add measures of rest as predictors to see if they are predictives of goals scored.
+The Poisson model is most commonly used to model soccer scores. It assumes that the number of goals scored by a team in a soccer game follows a Poisson distribution of some parameter. We will use a GLM with a Poisson link to predict the parameter. In the traditional Poisson model for the number of goals scored by a team, the team's attacking strength and its opponent's defensive weakness are the covariates used to model the parameter. Here we add measures of rest as predictors to see if they are predictive of goals scored.
 
 ### Model
 
@@ -310,7 +312,7 @@ $\sum_{i=1}^k{\frac{(f_i-e_i)^2}{e_i}} \sim \chi_k^2$
 
 Where
 \begin{itemize}
-    \item $k$ is the maximum number of goal. 9 for home teams and 6 for visitor teams.
+    \item $k$ is the maximum number of goals; 9 for home teams and 6 for visitor teams.
     \item $f_i$ is the observed frequency
     \item $e_i$ is the expected frequency
 \end{itemize}
@@ -341,7 +343,7 @@ We chose not to add this constraint and allow home and away rest to vary freely.
 
 ## Bivariate poisson model
 
-The bi-variate Poisson model assumes that the number of goals that home and away teams score is not only determined by factors affect each team, but also by factors affecting the game itself.
+The bi-variate Poisson model assumes that the number of goals that home and away teams score is not only determined by factors that affect each team, but also by factors affecting the game itself.
 
 \begin{itemize}
     \item Assume that $G_j \thicksim Poisson(\lambda_j + \lambda_g)$. 
@@ -350,7 +352,7 @@ The bi-variate Poisson model assumes that the number of goals that home and away
 
 The probability distributions for the number of goals by the home and away team is given by:
 
-\begin{equation}
+\begin{equation*}
     P_{BP}(G_h = g_h, G_a = g_a|\lambda_h, \lambda_a,  \lambda_g) = 
     e^{-(\lambda_h + \lambda_a + \lambda_g)} 
     \frac{\lambda_h^{g_h}}{g_h!} 
@@ -360,7 +362,7 @@ The probability distributions for the number of goals by the home and away team 
     {g_a \choose i} 
     i! 
     \bigg( \frac{\lambda_g}{ \lambda_g \lambda_a} \bigg)
-\end{equation}
+\end{equation*}
 
 ## Proportional odds cummulative logit model
 
@@ -489,7 +491,7 @@ Visitor & Intercept & 0.1\textasteriskcentered \textasteriskcentered \textasteri
  & Visitor rest \textgreater  5 days & -0.075\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.003) &  \\ 
  & Home defensive weakness & 0.275\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) & 0.278\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.005) \\ 
  & Home load & -0.028\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) & -0.028\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0) \\ 
- & home rest (days) &  & 0.01\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.001) \\ 
+ & Home rest (days) &  & 0.01\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.001) \\ 
  & Home rest \textgreater  5 days & 0.055\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.003) &  \\ 
 \hline \\[-1.8ex] 
 Game & Intercept & 0.156 (0.179) & 0.872\textasteriskcentered \textasteriskcentered \textasteriskcentered  (0.164) \\ 
@@ -509,9 +511,9 @@ Game & Intercept & 0.156 (0.179) & 0.872\textasteriskcentered \textasteriskcente
 
 ## Tennis - Logistic GLM
 
-In the simplest model (Table 9-1) looking at how the difference in minutes of the previous matches affects the probability of winning we see that having played a longer previous match than one's opponent increases the probability of winning. We then look for the diminishing effect of the number of prior minutes (Table 9-2) played by looking at the importance of minutes played squared and found no diminishing effects.  
+In the simplest model (Table 9-1) looking at how the difference in minutes of the previous matches affects the probability of winning we see that having played a longer previous match than one's opponent decreases the probability of winning; the log odds fall by 0.253 (SE: 0.018) for each additional hour played. We then look for the diminishing effect of the number of prior minutes (Table 9-2) played by looking at the importance of minutes played squared and found no diminishing effects.  
 
-When we control for the difference in ranking points between the two players (Table 9-3) the effect disappears. Further, controlling for whether or not a player or his opponent was seeded (Table 9-4) further helps predict tennis match outcomes.
+When we control for the difference in ranking points between the two players (Table 9-3), the effect decreases from a 0.253 fall to a 0.158 fall for each additional hour added to the difference previous match length. Controlling for whether or not a player or his opponent was seeded (Table 9-4) further slightly decreases the effect of PMLD.
 
 ```{r results = "asis"}
 source("~/Documents/masters_paper/models/tennisLog.R")
@@ -521,15 +523,16 @@ stargazer(m0, m02, m1, m2, single.row = TRUE, header = FALSE,
           covariate.labels = c("Prev. match length diff. (hours)",
                                "Squared match length diff.",
                                "Difference in ranking points", 
+                               "Mean ranking points",
                                "Player is seeded",
                                "Opponent is seeded",
                                "Constant"),
           title = "Logistic model for the probability of winning a tennis match")
 ```
 
-When we look at the effect by best of quantity (Table 10-1), we find the past match length difference to have a positive effect on winning probability for best of three matches and a negative effect on winning probability for best of five matches. 
+When we look at the effect by best of quantity (Table 10-1), we find that the past match length difference has a stronger effect on winning probability for best of five matches (-0.190, SE: 0.033) than best of three matches (0.124, SE: 0.025). 
 
-We then look at how surface plays a role (Table 10-2) we find that prior match length increases the effect of past match length difference on the probability of winning for clay surfaces and decreases the effect of past match length difference the probability of winning for grass surfaces. 
+We then look at how the surface plays a role (Table 10-2) we find that prior match length has a negative effect on win probability for all surfaces.
 
 ```{r results = "asis", cache = FALSE}
 source("~/Documents/masters_paper/models/tennisLog.R")
@@ -539,33 +542,16 @@ stargazer(m4, m3, single.row = TRUE, header = FALSE, table.placement = "H",
           covariate.labels = c("Diff. in ranking points",
                                "Player is seeded",
                                "Opponent is seeded",
-                               "Surface: carpet - PMLD (hours)",
-                               "Surface: clay - PMLD (hours)",
-                               "Surface: grass - PMLD (hours)",
-                               "Surface: hard - PMLD (hours)",
-                               "Best of 3 - PMLD (hours)", 
-                               "Best of 5 - PMLD (hours)"),
-          type = "latex", title = "Effect of previous match length on winning probability by match type")
-```
-*PMLD = Past match length difference
-
-We then split the surface effects by best of quantity (Table 11) and see that clay only increases the probability of winning on best of three matches and grass only decreases the probability of winning for best of 5 matches. As previously seen the effects are positive for best of three matches and negative for best of five matches.
-
-```{r results = "asis", cache = FALSE}
-source("~/Documents/masters_paper/models/tennisLog.R")
-stargazer(m53, m55, single.row = TRUE, header = FALSE, table.placement = "H",
-          dep.var.labels = "Win probability", font.size = "footnotesize",
-          order = c("delta_rank_pts", "player_seed", "opp_seed"),
-          covariate.labels = c("Diff. in ranking points",
-                               "Player is seeded",
-                               "Opponent is seeded",
+                               "Mean rank points",
+                               "Best of 3 - PMLD (hours)",
+                               "Best of 5 - PMLD (hours)",
                                "Surface: carpet - PMLD (hours)",
                                "Surface: clay - PMLD (hours)",
                                "Surface: grass - PMLD (hours)",
                                "Surface: hard - PMLD (hours)"),
-          column.labels = c("Best of 3", "Best of 5"),
           type = "latex", title = "Effect of previous match length on winning probability by match type")
 ```
+*PMLD = Past match length difference
 
 # Discussion
 
@@ -575,7 +561,7 @@ stargazer(m53, m55, single.row = TRUE, header = FALSE, table.placement = "H",
 
 Across models, the predictors for home goal or probability of winning have the same order of magnitude and signs as the predictors for visitor goal or probability of winning. They vary in their actual amounts because the baseline probabilities of winning and average number of goals for home and away teams differ.
 
-The one difference we do notice between a home and visitor effect is that of rest on the number of goals scored in a game. Home rest will decrease the number of goals across both teams, while visitor rest will increase it across both team. This suggest that perhaps the visiting team at a soccer game sets the pace in how aggresively it attacks which depends on its rest level. The home team responds by matching that aggresivity. The home team aims to keep the pace slow (minimize the overall number of goals) and is better equiped to do so when well rested.
+The one difference we do notice between a home and visitor effect is that of rest on the number of goals scored in a game. Home rest will decrease the number of goals across both teams, while visitor rest will increase it across both teams. This suggest that perhaps the visiting team at a soccer game sets the pace in how aggresively it attacks which depends on its rest level. The home team responds by matching that aggresivity. The home team aims to keep the pace slow (minimize the overall number of goals) and is better equiped to do so when well rested.
 
 ### Rest as days or as binary
 
@@ -591,13 +577,13 @@ In our first attempt at running these models we did not include game load - the 
 
 ### Importance of controlling for ranking points
 
-In the simplest model for the probability of winning a tennis match, the effect of the difference in the length of the player's previous matches is highly significant. However, when we add the difference in the players' ranking points and binary variables for whether or not the players' involved are seeded, the significance of the effect disappears suggesting some correlation between the predictors
+In the simplest model for the probability of winning a tennis match, the effect of the difference in the length of the player's previous matches is quite large. However, when we add the difference in the players' ranking points and binary variables for whether or not the players' involved are seeded, the effect decreases suggesting some correlation between the predictors.
 
-We find a correlation of 0.070 with a p-value less than $1*10^{-15}$ between a player's ranking points and the time needed to win a match. We also find that seeded players enter matches having played on average 3.87 minutes (SE 0.28) more in their previous match than their unseeded opponents. Both of these findings suggest that better players play longer matches. 
+We find a correlation of 0.023 with a p-value less than $1.02*10^{-5}$ between a player's ranking points and the time needed to win a match. Both of these findings suggest that better players play longer matches. 
 
 One hypothesis for why better players play longer match is that they are more able to put up a fight and last longer against strong opponents. If that is true, we expect the length of matches of better players to increase more with the strength of their opponents than weaker players. 
 
-In the Poisson model below in which we assume that the length of a tennis match is Poisson distributed according to a parameter which is linear in the predictors, we see that the length of seeded players matches increases with the ranking of their opponents more than the length of the matches of unseeded players does: 0.024 min/ranking point vs 0.005 min/ranking point. This supports our hypothesis that better players (proxied by seeded players), put up stronger fights against better opponents than unseeded players do.
+In the Poisson model below in which we assume that the length of a tennis match is Poisson distributed according to a parameter which is linear in the predictors, we see that the length of seeded players matches increases with the ranking of their opponents more than the length of the matches of unseeded players does: 0.024 hr/ranking point vs 0.005 hr/ranking point. This supports our hypothesis that better players (proxied by seeded players), put up stronger fights against better opponents than unseeded players do.
 
 ```{r results = "asis", cache = FALSE}
 source("~/Documents/masters_paper/Figures/Make/tennisDiscussion.R")
@@ -608,44 +594,50 @@ stargazer(m1, single.row = TRUE, header = FALSE,
           type = "latex", title = "Effect of opponent's ranking points on match length by player seed")
 ```
 
-Since a player's ability is correlated with the length of matches that player plays, it is important to control for it so that we can truly extract the effect of the length of the previous match on match outcomes. We used both rank points and seeded status of the players as controls.
+If better players play longer matches we would not see the addition of the difference in ranking points between models 9-1 and 9-3 decrease the effect of previous match length difference; in fact; we would see the opposite. Better players play longer matches, but their ability should make up for some of the tiredness and dwarf the tiredness-PMLD effect in the model where ability is not controlled for (9-1).
 
+When we look at the correlation between the previous match length difference and player' ranking points by round, we find that for all rounds the correlation is negative (Table 12). This means that better players tend to have played shorter previous matches. The correlation is stronger in the earlier rounds were better players face weaker opponents and can beat them quicker than in later rounds where opponents are stronger. One might wonder how we can reconcile better players playing longer matches and better players having played shorter previous matches. For lack of better information we assume that both players play an equal ability opponent in his previous match; on average this is likely true. The better player can beat his opponent quicker. However, better players can win matches against a stronger range of players and as table 11 shows the stronger an opponent, the more time is needed to defeat him. 
+
+```{r results = "asis", cache = FALSE}
+library(stargazer)
+source("~/Documents/masters_paper/Figures/Make/tennisDiscussion.R")
+df = rbindlist(out)
+names(df) = c("Round", "Correlation", "P-value")
+stargazer(df, summary = FALSE, title = "Correlation between player ranking and length of previous match", type = "latex", header = FALSE)
+```
+
+Better players having played shorter previous matches means that PMLD indirectly measures how bad a player is (ability). When we control for the ability of a player the effect of PMLD diminishes. The validity of the effect of previous match length difference is dependent on whether or not the difference in ranking points, mean ranking points, and seeded status adequately control for ability. We verify this by comparing model 9-3 to models subsetting on matches in which players are ranked similarly. 
+
+```{r}
+source("~/Documents/masters_paper/models/tennisLog.R")
+ggplot(df_out, aes(x = i, y = coef)) + geom_point() + geom_errorbar(aes(ymin = coef - 1.96*se, ymax = coef + 1.96*se)) + 
+  theme(plot.title = element_text(size = 10), axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8), axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10)) +
+  labs(title = "Effect and 95% CI of PMLD when restricting on the n most similarly ranked matches",
+       x = "n", y = "Coefficient")
+```
+
+In the above figure, we see that as we limit our model to players who are ranked more and more closely the effect of PMLD decreases slightly. In the 5000 matches with most similarly ranked players, there is no significant effect. It is unclear whether the large error bands there are from the low sample size or the large variation in the games.
 
 ### Best of quantity
 
-We find that the effect of previous match length differ significantly by best of quantity. In particular, the effect is negative for best of 5 set matches and positive for best 3 set matches. This suggests that for long matches the effect of the length of the previous matches is detrimental to the current match and for short matches it actually helps. We can test this hypothesis by looking at whether or not the effect of previous match length decrease as the number of sets in the current match increases. We see that the number of sets in the current match increases the benefit from a large previous match length difference for best of 3 matches and decreases the benefit for best of 5 matches.
-
-```{r results = "asis", cache = FALSE}
-source("~/Documents/masters_paper/Figures/Make/tennisDiscussion.R")
-stargazer(m43, m45, single.row = TRUE, header = FALSE, table.placement = "H", 
-          covariate.labels = c("Diff. in ranking points",
-                               "Player is seeded",
-                               "Opponent is seeded",
-                               "2 Set - PMLD (hours)",
-                               "3 Set - PMLD (hours)",
-                               "4 Set - PMLD (hours)",
-                               "5 Set - PMLD (hours)"),
-          column.labels = c("Best of 3", "Best of 5"),  font.size = "footnotesize",
-          type = "latex", title = "Effect of number of sets in the current match on importance of previous match difference")
-```
-
-This suggest that our hypothesis is incorrect and that there is something fundamentally different between Grand Slam best of 5 tournaments and other tournaments and warrants further investigation.
+We find that the effect of previous match length differ slightly but not significantly by best of quantity. The effect appears to be slightly stronger for best of 5 matches.
 
 ### Surface 
 
-When we break down the effect of previous match length difference by surface and best of quantity the directionality of the efffect broken down by best of quantity mostly remains. However, we notice that for most surfaces the effect for best of 3 matches is close to zero or less than zero for all except carpet where it is significantly positive. Perhaps playing on carpet has less of a physical impact on players. We can suppose that playing a tournament game impacts players in both a benefit -the practice/experience gained- and detriment -the physical impact. It may be that on carpet the physical impact is minimal and players benefit from the experience. The effects for other best of 3 surfaces are not significant. 
-
-The effects for best of 5 matches are negative across the board. The magnitude of the effect does differ a little bit. 
+The effects differ slightly but not significantly by surface. Players often have preferences on surfaces to play on and often cite the physical toll that they take as reasons why.
 
 # Conclusion
 
 ## Tennis
 
-We find an effect for the difference in length of the previous match between players on the probability of a player winning under certain conditions. In the simplest model where we look at the effect of rest difference while controlling for player ability, we do not see an effect. When we break the effect out by max number of sets in the match we observe a small significant effect; in best of 3 tournaments, having played a longer previous match increases the probability of winning slightly while in best of 5 tournaments it decreases slightly. We test the hypothesis that there are diminishing returns to previous match length but find that this is not the case.
+Assuming that we do an adequate job of controlling for player ability, we find an effect for the difference in length of the previous match between players on the probability of a player winning. Previous match length difference decreases log odds of winning by 0.151 (0.020) for each additional hour of play. The effect is still significant when broken out by best of quantity and surface, but we cannot say that the effects are significantly different within conditions.
 
 ## Soccer
 
 We try a variety of models (Poisson, Bivariate Poisson, and ordered logit) to evaluate the effect of rest days on soccer match outcomes and find no significant effect. We notice that the four control covariates, attacking strength, defensive weakness, and home and visitor game load which have significant effects, have the same magnitude and direction for their effect. This observation confirms existing models in which these are the main predictors. 
+
 ## Why we see effects in tennis and not soccer
 
 ### Tennis is easier to model than soccer
@@ -658,6 +650,7 @@ Perhaps more important than our predictor, the response variable explains more o
 
 Another reason for why we see more effects for tennis than soccer is the fact that soccer teams generally have at least 23 players, but only 11 players and three substitutes play in each game. This means that managers can control how tired players are by playing different players in different games. In singles men's tennis, there is only one player; if for a player the length of a match played three days ago affects a match played today we will be able to measure it. This is not the case in soccer where that player may not play the game today.
 
+# Code
 # References
 
 Barry Glendenning. "Winter may catch up with english elite as champions league resumes." _The Guardian_, 12 February 2018.
