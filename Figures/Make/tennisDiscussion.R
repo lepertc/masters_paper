@@ -11,7 +11,7 @@ df = readRDS("/Users/chloelepert/Documents/masters_paper/data-processing/Data/te
 # ggplot(df, aes(x = player_prior_minutes, y = player_rank_points)) + geom_point(size = 0.05) +
 #  xlim(0, 400)
 
-cor.test(df[df$won == 1, ]$player_prior_minutes, df[df$won == 1, ]$player_rank_points)
+cor.test(df$player_prior_minutes, df$player_rank_points)
 
 df = as.data.table(df)
 
@@ -28,3 +28,11 @@ m43 <- glm(won ~ delta_hours:as.factor(set) + delta_rank_pts +  player_seed +
 
 m45 <- glm(won ~ delta_hours:as.factor(set) + delta_rank_pts +  player_seed + 
              opp_seed, data = df[best_of == 5], family = binomial)
+
+roun = c("F", "SF", "QF", "R16", "R32", "R64")
+out = list()
+for(rr in roun) {
+  ct = cor.test(df[df$round == rr, ]$delta_hours, df[df$round == rr, ]$player_rank_points)
+  out[[length(out) + 1]] = list(round = rr, cor = ct$estimate, p.val = ct$p.value)
+}
+

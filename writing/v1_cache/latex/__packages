@@ -4,3 +4,5 @@ data.table
 gridExtra
 tidyr
 stargazer
+MASS
+glm.predict
